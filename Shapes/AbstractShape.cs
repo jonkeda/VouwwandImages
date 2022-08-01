@@ -1,0 +1,49 @@
+﻿using System.Collections.ObjectModel;
+using SkiaSharp;
+
+namespace VouwwandImages.Shapes
+{
+    public class ShapeCollection : Collection<AbstractShape>
+    {
+    }
+
+    public abstract class AbstractShape
+    {
+        public abstract void Draw(SKCanvas canvas);
+
+    }
+
+    public class Rectangle : AbstractShape
+    {
+        public Rectangle() { }
+
+        public Rectangle(float left, float top, float width, float height, SKPaint paint)
+        {
+            Top = top;
+            Left = left;
+            Height = height;
+            Width = width;
+            Paint = paint;
+        }
+
+        public Rectangle(float left, float top, float width, float height, SKPaint paint, float strokeWidth)
+        : this(left, top, width, height, paint)
+        {
+            StrokeWidth = strokeWidth;
+        }
+
+        public SKPaint Paint { get; set; }
+        public float Top { get; set; }
+        public float Left { get; set; }
+        public float Height { get; set; }
+        public float Width { get; set; }
+        public float StrokeWidth { get; set; }
+
+        public override void Draw(SKCanvas canvas)
+        {
+
+            canvas.DrawRect(Left + StrokeWidth / 2, Top + StrokeWidth / 2, Width - StrokeWidth, Height - StrokeWidth, Paint);
+
+        }
+    }
+}
