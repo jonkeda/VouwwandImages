@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using System;
+using SkiaSharp;
 
 namespace VouwwandImages.Shapes;
 
@@ -25,4 +26,11 @@ public class Line : AbstractShape
     {
         canvas.DrawLine(X1, Y1, X2, Y2, Paint);
     }
+
+    public override (float, float) GetMaximum()
+    {
+        return (Math.Max(X1, X2),
+            Math.Max(Y1, Y2));
+    }
+
 }

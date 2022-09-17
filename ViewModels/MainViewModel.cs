@@ -1,4 +1,5 @@
-﻿using CefSharp.Wpf;
+﻿using System.Windows.Input;
+using CefSharp.Wpf;
 using VouwwandImages.UI;
 
 namespace VouwwandImages.ViewModels;
@@ -8,14 +9,12 @@ public class MainViewModel : ViewModel
 
     public MainViewModel(ChromiumWebBrowser? chromiumWebBrowser)
     {
-        Images = new ProductsViewModel();
-
         Web = new WebViewModel(chromiumWebBrowser);
 
         PriceCalculation = new PriceCalculation();
     }
 
-    public ProductsViewModel Images { get; set; }
+    public ImagesViewModel Images { get; set; } = new();
 
     public WebViewModel Web { get; set; }
 

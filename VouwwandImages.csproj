@@ -8,14 +8,34 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Weiland.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Images\Weiland.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Products\Doors\" />
     <Folder Include="UI\Controls\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CefSharp.Wpf.NETCore" Version="103.0.120" />
+    <PackageReference Include="CefSharp.Wpf.NETCore" Version="105.3.330" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
-    <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.0" />
+    <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-arm64" Version="105.3.33" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x64" Version="105.3.33" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x86" Version="105.3.33" />
   </ItemGroup> 
 
 </Project>

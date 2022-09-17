@@ -11,6 +11,7 @@
         mc:Ignorable="d" WindowState="Maximized"
         Title="MainWindow" Height="450" Width="800">
     <TabControl Grid.Column="0" TabIndex="1">
+        <!--
         <TabItem Header="Web" DataContext="{Binding Web}">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -73,15 +74,27 @@
                 </StackPanel>
             </Grid>
         </TabItem>
-
-        <TabItem Header="Images">
+-->
+        <TabItem Header="Images" DataContext="{Binding Images }">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                <views:ProductsView Grid.Row="1" Products="{Binding Images }" />
+                <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <Button Command="{Binding SaveImagesCommand}">Save</Button>
+                </StackPanel>
+
+                <ListBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Windows}" 
+                         SelectedItem="{Binding SelectedWindow}" ></ListBox>
+
+                <views:DrawingView Grid.Column="1" Grid.Row="1" 
+                                   Drawing="{Binding SelectedDrawing}" />
             </Grid>
         </TabItem>
     </TabControl>

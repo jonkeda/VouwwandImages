@@ -74,21 +74,21 @@ namespace VouwwandImages.ViewModels
         {
             var response = await _browser.EvaluateScriptAsync($"document.getElementById('{id}').getAttribute('style')");
 
-            return (string)response.Result;
+            return (string) response.Result;
         }
 
         private async Task<string?> GetId(string id)
         {
             var response = await _browser.EvaluateScriptAsync($"document.getElementById('{id}').getAttribute('id')");
 
-            return (string?)response.Result;
+            return (string?) response.Result;
         }
 
         private async Task<string> GetValue(string id)
         {
             var response = await _browser.EvaluateScriptAsync($"document.getElementById('{id}').innerText");
 
-            return (string)response.Result;
+            return (string) response.Result;
         }
 
         private async Task WaitForStyle(string id, string style)
@@ -173,11 +173,13 @@ namespace VouwwandImages.ViewModels
             get { return _minimumWidth; }
             set { SetProperty(ref _minimumWidth, value); }
         }
+
         public string MaximumWidth
         {
             get { return _maximumWidth; }
             set { SetProperty(ref _maximumWidth, value); }
         }
+
         public string StepWidth
         {
             get { return _stepWidth; }
@@ -189,11 +191,13 @@ namespace VouwwandImages.ViewModels
             get { return _minimumHeight; }
             set { SetProperty(ref _minimumHeight, value); }
         }
+
         public string MaximumHeight
         {
             get { return _maximumHeight; }
             set { SetProperty(ref _maximumHeight, value); }
         }
+
         public string StepHeight
         {
             get { return _stepHeight; }

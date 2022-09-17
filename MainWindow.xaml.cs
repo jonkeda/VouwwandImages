@@ -9,7 +9,7 @@ namespace VouwwandImages
         {
             InitializeComponent();
 
-            DataContext = new MainViewModel(ChromiumBrowserEx.WebBrowser);
+            DataContext = new MainViewModel(null /*ChromiumBrowserEx.WebBrowser*/);
         }
     }
 }
