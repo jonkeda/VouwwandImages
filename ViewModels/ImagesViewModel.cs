@@ -1,21 +1,26 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using Microsoft.Win32;
+using VouwwandImages.Factories;
 using VouwwandImages.Models.Products;
-using VouwwandImages.Products.FoldingDoors;
 using VouwwandImages.UI;
 
 namespace VouwwandImages.ViewModels;
 
 public class ImagesViewModel : ViewModel
 {
-    private Window _selectedWindow;
+    private Frame? _selectedFrame;
+    private Frames? _selectedFrames;
 
     public ImagesViewModel()
     {
         Drawings = new DrawingsViewModel();
 
-        Windows = WindowTypes.Draaiingen;
+        FramesCollection = WindowTypes.GetFrame();
+
+        SelectedFrames = FramesCollection.LastOrDefault();
+        SelectedFrame = SelectedFrames?.FrameItems.LastOrDefault();
     }
 
     public ICommand SaveImagesCommand
@@ -25,30 +30,44 @@ public class ImagesViewModel : ViewModel
 
     private void SaveImages()
     {
+        if (SelectedFrames == null)
+        {
+            return;
+        }
+
         var sfd = new SaveFileDialog();
 
         if (sfd.ShowDialog() == true)
         {
             string folder = Path.GetDirectoryName(sfd.FileName);
-            DrawingFactory factory = new DrawingFactory();
-            foreach (Window window in Windows)
+            DrawingsFactory factory = new DrawingsFactory();
+            foreach (Frame frame in SelectedFrames.FrameItems)
             {
-                DrawingModel drawing = factory.CreateDrawing(window);
-                drawing.SaveImage(Path.Combine(folder, $"{window.Uid}.png"));
+                DrawingModel drawing = factory.CreateDrawing(frame);
+                drawing.SaveImage(Path.Combine(folder, $"{frame.Uid}.png"));
             }
         }
     }
 
     public DrawingsViewModel Drawings { get; set; }
 
-    public WindowCollection Windows { get; set; }
+    public FramesCollection FramesCollection { get; set; } = new();
 
-    public Window SelectedWindow
+    public Frames? SelectedFrames
     {
-        get { return _selectedWindow; }
+        get { return _selectedFrames; }
         set
         {
-            if (SetProperty(ref _selectedWindow, value))
+            SetProperty(ref _selectedFrames, value);
+        }
+    }
+
+    public Frame? SelectedFrame
+    {
+        get { return _selectedFrame; }
+        set
+        {
+            if (SetProperty(ref _selectedFrame, value))
             {
                 NotifyPropertyChanged(nameof(SelectedDrawing));
             }
@@ -59,8 +78,8 @@ public class ImagesViewModel : ViewModel
     {
         get
         {
-            DrawingFactory factory = new DrawingFactory();
-            return factory.CreateDrawing(SelectedWindow);
+            DrawingsFactory factory = new DrawingsFactory();
+            return factory.CreateDrawing(SelectedFrame);
         }
     }
 }

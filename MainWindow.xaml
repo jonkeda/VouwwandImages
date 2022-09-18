@@ -79,6 +79,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -90,10 +91,12 @@
                     <Button Command="{Binding SaveImagesCommand}">Save</Button>
                 </StackPanel>
 
-                <ListBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Windows}" 
-                         SelectedItem="{Binding SelectedWindow}" ></ListBox>
+                <ComboBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding FramesCollection}" 
+                          SelectedItem="{Binding SelectedFrames}" ></ComboBox>
+                <ListBox Grid.Column="0" Grid.Row="2" ItemsSource="{Binding SelectedFrames.FrameItems}" 
+                         SelectedItem="{Binding SelectedFrame}" ></ListBox>
 
-                <views:DrawingView Grid.Column="1" Grid.Row="1" 
+                <views:DrawingView Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" 
                                    Drawing="{Binding SelectedDrawing}" />
             </Grid>
         </TabItem>

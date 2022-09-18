@@ -54,8 +54,9 @@ namespace VouwwandImages.Shapes
         public override void Draw(SKCanvas canvas)
         {
             SKRect rect = new SKRect(Left, Top, Left + Width, Top + Height);
+            SKRect rectBitmap = new SKRect(0, 0, Image.Width, Image.Height);
 
-            canvas.DrawBitmap(Image, rect, rect, Paint);
+            canvas.DrawBitmap(Image, rectBitmap, rect, Paint);
             // canvas.DrawRect(Left + StrokeWidth / 2, Top + StrokeWidth / 2, Width - StrokeWidth, Height - StrokeWidth, Paint);
 
         }

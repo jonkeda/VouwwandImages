@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Products\Doors\" />
     <Folder Include="UI\Controls\" />
   </ItemGroup>
 
