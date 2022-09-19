@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using System.Threading.Channels;
+using SkiaSharp;
 using VouwwandImages.Images;
 using VouwwandImages.Models.Products;
 using VouwwandImages.Shapes;
@@ -31,14 +32,14 @@ namespace VouwwandImages.Factories
                 shapes.Add(new Bitmap(left, top, width, height, null, ImageResource.LoadImage()));
             }
             shapes.Add(new Rectangle(left, top, width, height, framePaint, frameSize));
-
+            bool closed = true;
             float doorLeft = frameSize;
             foreach (Sash sash in frame.Sashes)
             {
                 float doorTop = frameSize;
                 foreach (Window window in sash.WindowCollection)
                 {
-                    CreateWindow(shapes, doorLeft, doorTop, window.Width, window.Height, spine, window, frame.Dimension);
+                    CreateWindow(shapes, doorLeft, doorTop, window.Width, window.Height, spine, ref closed, window, frame.Dimension);
                     doorTop += window.Height;
                 }
 
@@ -49,17 +50,17 @@ namespace VouwwandImages.Factories
 
 
         private void CreateWindow(ShapeCollection shapes, 
-            float left, float top, float width, float height, float spine,
+            float left, float top, float width, float height, float spine, ref bool closed,
             Window window, Dimensions dimension)
         {
             if (dimension == Dimensions.D2)
                 CreateDoor2dDimension(shapes, left, top, width, height, spine, window);
             else
-                CreateDoor3dDimension(shapes, left, top, width, height, spine, window);
+                CreateDoor3dDimension(shapes, left, top, width, height, spine, ref closed, window);
         }
 
         private static void CreateDoor3dDimension(ShapeCollection shapes, 
-            float left, float top, float width, float height, float spine,
+            float left, float top, float width, float height, float spine, ref bool closed,
             Window window)
         {
             left += spine / 2;
@@ -75,6 +76,7 @@ namespace VouwwandImages.Factories
                 new SKColor[] { SKColors.White.WithAlpha(0x80), SKColors.LightBlue.WithAlpha(0x80) },
                 new float[] { 0, 1 },
                 SKShaderTileMode.Repeat);
+            
             if (window.SwingHorizontal == SwingHorizontal.Left)
             {
                 if (window.SwingDirection == SwingDirection.Outside)
@@ -94,8 +96,8 @@ namespace VouwwandImages.Factories
                         new SKPoint(left + width * 0.75f, top + height * 1.25f),
                         new SKPoint(left, top + height), windowPaint, background
                     ));
-
                 }
+                closed = true;
             }
             else if (window.SwingHorizontal == SwingHorizontal.Right)
             {
@@ -117,6 +119,7 @@ namespace VouwwandImages.Factories
                         new SKPoint(left + width, top + height), windowPaint, background
                     ));
                 }
+                closed = true;
             }
             else
             if (window.SwingVertical == SwingVertical.Up)
@@ -126,6 +129,56 @@ namespace VouwwandImages.Factories
             else if (window.SwingVertical == SwingVertical.Down)
             {
 
+            }
+            else if (window.FoldHorizontal == FoldHorizontal.Left
+                     || window.FoldHorizontal == FoldHorizontal.Right)
+            {
+                float height1;
+                float height2;
+                if (window.SwingDirection == SwingDirection.Outside)
+                {
+                    height1 = 0.25f;
+                    height2 = 0.75f;
+                }
+                else
+                {
+                    height1 = -0.25f;
+                    height2 = 1.25f;
+                }
+
+                float shoveLeft = 0;
+                float shoveRight = 0;
+                if (window.FirstFold)
+                {
+                    if (window.FoldHorizontal == FoldHorizontal.Right)
+                    {
+                        shoveLeft = width * 0.25f;
+                    }
+                    else
+                    {
+                        shoveRight = width * 0.25f;
+                    }
+                }
+
+                if (closed)
+                {
+                    shapes.Add(new Path(
+                        new SKPoint(left + shoveLeft, top),
+                        new SKPoint(left + width - shoveRight, top + height * height1),
+                        new SKPoint(left + width - shoveRight, top + height * height2),
+                        new SKPoint(left + shoveLeft, top + height), windowPaint, background
+                    ));
+                }
+                else
+                {
+                    shapes.Add(new Path(
+                        new SKPoint(left + shoveLeft, top + height * height1),
+                        new SKPoint(left + width - shoveRight, top),
+                        new SKPoint(left + width - shoveRight, top + height ),
+                        new SKPoint(left + shoveLeft, top + height * height2), windowPaint, background
+                    ));
+                }
+                closed = !closed;
             }
             else
             {

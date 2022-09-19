@@ -73,6 +73,7 @@ public class Window
     public SlideVertical SlideVertical { get; set; }
 
     public FoldHorizontal FoldHorizontal { get; set; }
+    public bool FirstFold { get; set; }
 
     public string Uid { get; set; }
 

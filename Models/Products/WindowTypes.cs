@@ -1,4 +1,6 @@
-﻿namespace VouwwandImages.Models.Products
+﻿using System.Linq;
+
+namespace VouwwandImages.Models.Products
 {
     public class WindowTypes
     {
@@ -88,16 +90,50 @@
                         frame.Sashes.Add(sash);
                         sash.WindowCollection.Add(new Window(vouwwandWidth, vouwwandHeight, FoldHorizontal.Left) { SwingDirection = direction }) ;
                     }
+
+                    if (frame.Sashes.Count > 0)
+                    {
+                        frame.Sashes.Last().WindowCollection[0].FirstFold = true;
+                    }
+                    bool first = true;
                     for (int j = k; j < i; j++)
                     {
                         var sash = new Sash();
                         frame.Sashes.Add(sash);
-                        sash.WindowCollection.Add(new Window(vouwwandWidth, vouwwandHeight, FoldHorizontal.Right) { SwingDirection = direction });
+                        sash.WindowCollection.Add(new Window(vouwwandWidth, vouwwandHeight, FoldHorizontal.Right)
+                        {
+                            SwingDirection = direction,
+                            FirstFold = first
+                        });
+                        first = false;
                     }
 
+                    if (i % 2 == 0)
                     {
-                        SetSwingHorizontal(frame, k, SwingHorizontal.Right);
-                        SetSwingHorizontal(frame, k - 1, SwingHorizontal.Left);
+                        if (k % 2 == 1)
+                        {
+                            SetSwingHorizontal(frame, k - 1, SwingHorizontal.Left);
+                            SetSwingHorizontal(frame, k, SwingHorizontal.Right);
+                        }
+                        if (k == 1)
+                        {
+                            ClearFoldHorizontal(frame, 0);
+                        }
+                        if (i - k == 1)
+                        {
+                            ClearFoldHorizontal(frame, i - 1);
+                        }
+                    }
+                    else
+                    {
+                        if (k % 2 == 0)
+                        {
+                            SetSwingHorizontal(frame, k, SwingHorizontal.Right);
+                        }
+                        else
+                        {
+                            SetSwingHorizontal(frame, k - 1, SwingHorizontal.Left);
+                        }
                     }
                 }
             }
@@ -148,6 +184,20 @@
             return frames;
         }
 
+        private static void ClearFoldHorizontal(Frame frame, int k)
+        {
+            if (k >= 0
+                && k < frame.Sashes.Count)
+            {
+
+                var sash = frame.Sashes[k];
+                foreach (Window window in sash.WindowCollection)
+                {
+                    window.FoldHorizontal = FoldHorizontal.None;
+                }
+            }
+
+        }
 
         private static void SetSwingHorizontal(Frame frame, int k, SwingHorizontal swingHorizontal)
         {
