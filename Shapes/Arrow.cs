@@ -82,4 +82,10 @@ public class Arrow : AbstractShape
             Top);
     }
 
+    public override (float, float) GetMinimum()
+    {
+        return (Left,
+            Top);
+    }
+
 }

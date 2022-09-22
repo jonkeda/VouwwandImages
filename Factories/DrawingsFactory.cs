@@ -23,10 +23,11 @@ namespace VouwwandImages.Factories
             width += frameSize * 2;
             height += frameSize * 2;
 
-            SKPaint background = new SKPaint { Color = SKColors.White };
+            SKPaint background = new SKPaint { Color = SKColors.White, IsAntialias = true };
+            
             shapes.Add(new Rectangle(left, top, width, height, background));
 
-            SKPaint framePaint = new SKPaint { Color = SKColors.Black, StrokeWidth = frameSize, Style = SKPaintStyle.Stroke };
+            SKPaint framePaint = new SKPaint { Color = SKColors.Black, StrokeWidth = frameSize, Style = SKPaintStyle.Stroke, IsAntialias = true };
             if (frame.Dimension == Dimensions.D3)
             {
                 shapes.Add(new Bitmap(left, top, width, height, null, ImageResource.LoadImage()));
@@ -68,11 +69,11 @@ namespace VouwwandImages.Factories
             width -= spine;
             height -= spine;
             
-            SKPaint windowPaint = new SKPaint { Color = SKColors.DarkGray, StrokeWidth = spine, Style = SKPaintStyle.Stroke};
-            SKPaint background = new SKPaint { Color = SKColors.Blue };
+            SKPaint windowPaint = new SKPaint { Color = SKColors.DarkGray, StrokeWidth = spine, Style = SKPaintStyle.Stroke, IsAntialias = true };
+            SKPaint background = new SKPaint { Color = SKColors.Blue, IsAntialias = true };
             background.Shader = SKShader.CreateLinearGradient(
-                new SKPoint(left, top),
-                new SKPoint(left + width * 1.25f, top + height* 1.25f),
+                new SKPoint(left, top - height * 0.5f),
+                new SKPoint(left + width * 1.25f, top + height * 1.25f),
                 new SKColor[] { SKColors.White.WithAlpha(0x80), SKColors.LightBlue.WithAlpha(0x80) },
                 new float[] { 0, 1 },
                 SKShaderTileMode.Repeat);
@@ -196,7 +197,7 @@ namespace VouwwandImages.Factories
             float left, float top, float width, float height, float spine,
             Window window)
         {
-            SKPaint windowPaint = new SKPaint { Color = SKColors.DarkGray, StrokeWidth = spine, Style = SKPaintStyle.Stroke };
+            SKPaint windowPaint = new SKPaint { Color = SKColors.DarkGray, StrokeWidth = spine, Style = SKPaintStyle.Stroke, IsAntialias = true };
             shapes.Add(new Rectangle(left, top, width, height, windowPaint, spine));
 
             left += spine;
@@ -204,7 +205,7 @@ namespace VouwwandImages.Factories
             width -= spine * 2;
             height -= spine * 2;
 
-            SKPaint background = new SKPaint { Color = SKColors.Blue };
+            SKPaint background = new SKPaint { Color = SKColors.Blue, IsAntialias = true };
             background.Shader = SKShader.CreateLinearGradient(
                 new SKPoint(left, top),
                 new SKPoint(left + width, top + height),
@@ -222,7 +223,8 @@ namespace VouwwandImages.Factories
                 Color = SKColors.Black,
                 StrokeWidth = strokeWidth,
                 Style = SKPaintStyle.Stroke,
-                PathEffect = dashEffect
+                PathEffect = dashEffect,
+                IsAntialias = true
             };
 
             if (window.SwingHorizontal == SwingHorizontal.Left)
@@ -250,7 +252,8 @@ namespace VouwwandImages.Factories
             SKPaint arrow = new SKPaint
             {
                 Color = SKColors.Black, 
-                StrokeWidth = 3
+                StrokeWidth = 3,
+                IsAntialias = true
             };
 
             if (window.SlideHorizontal == SlideHorizontal.Left)

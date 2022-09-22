@@ -33,4 +33,10 @@ public class Line : AbstractShape
             Math.Max(Y1, Y2));
     }
 
+    public override (float, float) GetMinimum()
+    {
+        return (Math.Min(X1, X2),
+            Math.Min(Y1, Y2));
+    }
+
 }

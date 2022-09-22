@@ -1,7 +1,5 @@
 ﻿using SkiaSharp;
 using System.IO;
-using System.Windows.Media;
-using System.Windows.Shapes;
 using VouwwandImages.Shapes;
 
 namespace VouwwandImages.Models.Products
@@ -17,18 +15,24 @@ namespace VouwwandImages.Models.Products
 
         public void Draw(SKCanvas canvas)
         {
+            var (minWidth, minHeight) = GetMinimumAbs();
+            canvas.Translate(minWidth, minHeight);
             foreach (var shape in Shapes)
             {
                 shape.Draw(canvas);
             }
         }
 
+
         public void SaveImage(string filename)
         {
-            var (width, height) = Shapes.GetMaximum();
+            var (maxWidth, maxHeight) = Shapes.GetMaximum();
+            var (minWidth, minHeight) = GetMinimumAbs( );
 
-            SKBitmap bitmap = new SKBitmap((int)width, (int)height);
+            SKBitmap bitmap = new SKBitmap((int)maxWidth + (int)minWidth, 
+                (int)maxHeight + (int)minHeight);
             SKCanvas canvas = new SKCanvas(bitmap);
+            
             canvas.Clear(SKColors.White);
             Draw(canvas);
             using Stream s = File.Create(filename);
@@ -36,5 +40,29 @@ namespace VouwwandImages.Models.Products
             d.SaveTo(s);
         }
 
+        private (float, float) GetMinimumAbs()
+        {
+            var ( minWidth, minHeight) = Shapes.GetMinimum();
+
+            if (minWidth < 0)
+            {
+                minWidth = -minWidth;
+            }
+            else
+            {
+                minWidth = 0;
+            }
+
+            if (minHeight < 0)
+            {
+                minHeight = -minHeight;
+            }
+            else
+            {
+                minHeight = 0;
+            }
+
+            return (minWidth, minHeight);
+        }
     }
 }

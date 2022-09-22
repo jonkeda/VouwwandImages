@@ -14,6 +14,8 @@ public class MainViewModel : ViewModel
         PriceCalculation = new PriceCalculation();
     }
 
+    public TranslatorViewModel Translator { get; set; } = new();
+
     public ImagesViewModel Images { get; set; } = new();
 
     public WebViewModel Web { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace VouwwandImages.Models.Products
 {
@@ -34,11 +35,11 @@ namespace VouwwandImages.Models.Products
             })
             {
                 Uid = $"Swing {dimension}",
-                Name = "Draaingen",
+                Name = "Draaingen"
             };
         }
 
-        private static Frames CreateFoldingDoorNumberOfSashes(Dimensions dimension)
+        private static Frames CreateFoldingDoorNumberOfSashes(Dimensions dimension, string directory)
         {
             float vouwwandWidth = 100;
             float vouwwandHeight = 200;
@@ -47,6 +48,7 @@ namespace VouwwandImages.Models.Products
             {
                 Uid = "FoldingDoors",
                 Name = $"Vouwwanden aantallen {dimension}",
+                Directory = directory
             };
 
             for (int i = 2; i <= 6; i++)
@@ -64,15 +66,16 @@ namespace VouwwandImages.Models.Products
             return foldingDoorNumberOfSashes;
         }
 
-        private static Frames CreateFoldingDoorDistribution(Dimensions dimension, SwingDirection direction, string extrachar)
+        private static Frames CreateFoldingDoorDistribution(Dimensions dimension, SwingDirection direction, string extrachar, string directory)
         {
             float vouwwandWidth = 100;
             float vouwwandHeight = 200;
 
-            var foldingDoorDistribution = new Frames
+            var frames = new Frames
             {
                 Uid = "FoldingDoorsDistribution",
                 Name = $"Vouwwanden verdeling {dimension}",
+                Directory = directory
             };
 
             for (int i = 2; i <= 6; i++)
@@ -83,7 +86,7 @@ namespace VouwwandImages.Models.Products
                     {
                         Dimension = dimension
                     };
-                    foldingDoorDistribution.FrameItems.Add(frame);
+                    frames.FrameItems.Add(frame);
                     for (int j = 0; j < k; j++)
                     {
                         var sash = new Sash();
@@ -138,11 +141,11 @@ namespace VouwwandImages.Models.Products
                 }
             }
 
-            return foldingDoorDistribution;
+            return frames;
         }
 
 
-        private static Frames CreateFoldingDirection(Dimensions dimension)
+        private static Frames CreateFoldingDirection(Dimensions dimension, string directory)
         {
             float vouwwandWidth = 100;
             float vouwwandHeight = 200;
@@ -151,6 +154,7 @@ namespace VouwwandImages.Models.Products
             {
                 Uid = "FoldingDoorDirection",
                 Name = $"Vouwwanden richting {dimension}",
+                Directory = directory
             };
 
             var frame = new Frame($"Inside", $"Naar binnen")
@@ -252,19 +256,23 @@ namespace VouwwandImages.Models.Products
             frames.Add(CreateSwing(Dimensions.D2));
             frames.Add(CreateSwing(Dimensions.D3));
 
-            frames.Add(CreateFoldingDoorNumberOfSashes(Dimensions.D2));
-            frames.Add(CreateFoldingDoorNumberOfSashes(Dimensions.D3));
+            frames.Add(CreateFoldingDoorNumberOfSashes(Dimensions.D2, ""));
+            frames.Add(CreateFoldingDoorNumberOfSashes(Dimensions.D3, @"C:\Github\nopCommerce450\src\Plugins\Nop.Plugin.ProductConfigurator.Vouwwanden\Imports\FoldingDoors\NumberOfSashOptions\"));
 
-            frames.Add(CreateFoldingDoorDistribution(Dimensions.D2, SwingDirection.Outside, ""));
-            frames.Add(CreateFoldingDoorDistribution(Dimensions.D3, SwingDirection.Outside, ""));
+            frames.Add(CreateFoldingDoorDistribution(Dimensions.D2, SwingDirection.Outside, "", ""));
+            frames.Add(CreateFoldingDoorDistribution(Dimensions.D3, SwingDirection.Outside, "", 
+                @"C:\Github\nopCommerce450\src\Plugins\Nop.Plugin.ProductConfigurator.Vouwwanden\Imports\FoldingDoors\DistributionOptions\"));
 
-            frames.Add(CreateFoldingDoorDistribution(Dimensions.D3, SwingDirection.Inside, "Z"));
-            frames.Add(CreateFoldingDoorDistribution(Dimensions.D3, SwingDirection.Outside, "W"));
+            frames.Add(CreateFoldingDoorDistribution(Dimensions.D3, SwingDirection.Inside, "Z",
+                @"C:\Github\nopCommerce450\src\Plugins\Nop.Plugin.ProductConfigurator.Vouwwanden\Imports\AluminiumVouwwanden\"));
+            frames.Add(CreateFoldingDoorDistribution(Dimensions.D3, SwingDirection.Outside, "W",
+                @"C:\Github\nopCommerce450\src\Plugins\Nop.Plugin.ProductConfigurator.Vouwwanden\Imports\AluminiumVouwwanden\"));
 
             frames.Add(CreateDoors(Dimensions.D2));
             frames.Add(CreateDoors(Dimensions.D3));
 
-            frames.Add(CreateFoldingDirection(Dimensions.D3));
+            frames.Add(CreateFoldingDirection(Dimensions.D3, 
+                @"C:\Github\nopCommerce450\src\Plugins\Nop.Plugin.ProductConfigurator.Vouwwanden\Imports\FoldingDoors\FoldingDirectionOptions\"));
 
             return frames;
         }

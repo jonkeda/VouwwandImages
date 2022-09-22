@@ -49,6 +49,24 @@ public class ImagesViewModel : ViewModel
         }
     }
 
+    public ICommand SaveAllImagesCommand
+    {
+        get { return new TargetCommand(SaveAllImages); }
+    }
+
+    private void SaveAllImages()
+    {
+        foreach (var frames in FramesCollection.Where(f => !string.IsNullOrEmpty(f.Directory)))
+        {
+            DrawingsFactory factory = new DrawingsFactory();
+            foreach (Frame frame in frames.FrameItems)
+            {
+                DrawingModel drawing = factory.CreateDrawing(frame);
+                drawing.SaveImage(Path.Combine(frames.Directory, $"{frame.Uid}.png"));
+            }
+        }
+    }
+
     public DrawingsViewModel Drawings { get; set; }
 
     public FramesCollection FramesCollection { get; set; } = new();

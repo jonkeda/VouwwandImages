@@ -54,6 +54,7 @@ public class Frames
     public string Uid { get; set; }
 
     public FrameCollection FrameItems { get; set; } = new();
+    public string Directory { get; set; }
 
     public override string ToString()
     {

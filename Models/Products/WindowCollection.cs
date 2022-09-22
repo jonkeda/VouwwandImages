@@ -17,4 +17,17 @@ public class WindowCollection : Collection<Window>
 
         return (width, height);
     }
+
+    public (float width, float height) GetMinimum()
+    {
+        float width = 0;
+        float height = 0;
+        foreach (Window window in this)
+        {
+            width = Math.Min(width, window.Width);
+            height += window.Height;
+        }
+        return (width, height);
+    }
+
 }

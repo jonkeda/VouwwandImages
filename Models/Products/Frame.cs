@@ -46,6 +46,11 @@ public class Frame
         return $"{Name} ({Uid})";
     }
 
+    public (float width, float height) GetMinimum()
+    {
+        return Sashes.GetMinimum();
+    }
+
     public (float width, float height) GetMaximum()
     {
         return Sashes.GetMaximum();

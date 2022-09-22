@@ -1,53 +1,7 @@
-﻿using System;
-using SkiaSharp;
+﻿using SkiaSharp;
 using System.Windows.Media.Media3D;
 
 namespace VouwwandImages.Shapes;
-
-public class Path : AbstractShape
-{
-    public Path()
-    {
-        Points = new SKPoint[0];
-    }
-
-    public Path(SKPoint p1, SKPoint p2, SKPoint p3, SKPoint p4, 
-        SKPaint strokePaint, SKPaint background)
-    {
-        Points = new SKPoint[4];
-        Points[0] = p1;
-        Points[1] = p2;
-        Points[2] = p3;
-        Points[3] = p4;
-        StrokePaint = strokePaint;
-        Background = background;
-    }
-
-    public SKPoint[] Points { get; set; }
-    public SKPaint StrokePaint { get; set; }
-    public SKPaint Background { get; set; }
-    public float StrokeWidth { get; set; }
-
-    public override void Draw(SKCanvas canvas)
-    {
-        SKPath path = new SKPath();
-        path.AddPoly(Points);
-        canvas.DrawPath(path, StrokePaint);
-        canvas.DrawPath(path, Background);
-    }
-
-    public override (float, float) GetMaximum()
-    {
-        float maxX = 0;
-        float maxY = 0;
-        foreach (SKPoint point in Points)
-        {
-            maxX = Math.Max(maxX, point.X);
-            maxY = Math.Max(maxY, point.Y);
-        }
-        return (maxX, maxY);
-    }
-}
 
 public class Rectangle : AbstractShape
 {
@@ -87,6 +41,13 @@ public class Rectangle : AbstractShape
     {
         return (Left + StrokeWidth / 2 + Width - StrokeWidth,
                 Top + StrokeWidth / 2 + Height - StrokeWidth
+            );
+    }
+
+    public override (float, float) GetMinimum()
+    {
+        return (Left,
+                Top
             );
     }
 }

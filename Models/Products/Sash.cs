@@ -8,4 +8,9 @@ public class Sash
     {
         return WindowCollection.GetMaximum();
     }
+
+    public (float width, float height) GetMinimum()
+    {
+        return WindowCollection.GetMinimum();
+    }
 }
