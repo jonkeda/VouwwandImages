@@ -1,10 +1,8 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using SkiaSharp.Views.WPF;
 using VouwwandImages.Models.Products;
-using VouwwandImages.ViewModels;
 
 namespace VouwwandImages.Views;
 

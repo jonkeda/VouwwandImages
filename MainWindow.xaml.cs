@@ -1,15 +1,14 @@
-﻿using System.Windows;
-using VouwwandImages.ViewModels;
+﻿using VouwwandImages.ViewModels;
 
 namespace VouwwandImages
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
             InitializeComponent();
 
-            DataContext = new MainViewModel(null /*ChromiumBrowserEx.WebBrowser*/);
+            DataContext = new MainViewModel(ChromiumBrowserEx.WebBrowser);
         }
     }
 }

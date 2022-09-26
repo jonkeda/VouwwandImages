@@ -17,13 +17,7 @@ namespace VouwwandImages.ViewModels
         {
             _browser = browser;
 
-            _minimumWidth = "2000";
-            _maximumWidth = "4000";
-            _stepWidth = "500";
-
-            _minimumHeight = "2000";
-            _maximumHeight = "2500";
-            _stepHeight = "250";
+            StandardDefaults();
         }
 
 
@@ -35,9 +29,36 @@ namespace VouwwandImages.ViewModels
         private void Login()
         {
             ClickByClass("cookies__button--accept");
-            Set("user-login", "Tvpbeheer@gmail.com");
+            Set("user-login", "info@kozijnkopen.com");
 
             // SetTextbox("password", "");
+        }
+
+        public ICommand NoGlassCommand
+        {
+            get { return new TargetCommand(NoGlass); }
+        }
+
+        private async void NoGlass()
+        {
+            ClickByHref("#menu_sash_0-3");
+
+            ClickBy("div", "data-configurator-target", "[CONFIGS][CONFIG][0][GLAZING]");
+
+            CheckById("BEZ_SZYBY");
+
+            ClickByClass("glass-filter-button-container");
+
+            ClickBy("div", "data-value", "00/BEZ_SZYBY_48");
+
+            await WaitForStyle("workshop_wait", "display: none;");
+
+            Set("WORKSHOP[CONFIGS][CONFIG][0][GLAZING_OPTION][0][PSZ_waga_bsz]", "20");
+
+            // ClickBy( apply)
+
+            ClickByHref("#menu_sash_0-3");
+
         }
 
         private void Set(string id, string text)
@@ -45,7 +66,13 @@ namespace VouwwandImages.ViewModels
             _browser.ExecuteScriptAsync($"document.getElementById('{id}').value= '{text}'");
         }
 
-        private void Click(string id)
+        private void CheckById(string id)
+        {
+            _browser.ExecuteScriptAsync($"document.getElementById('{id}').check=true");
+        }
+
+
+        private void ClickById(string id)
         {
             _browser.ExecuteScriptAsync($"document.getElementById('{id}').click()");
         }
@@ -63,6 +90,16 @@ namespace VouwwandImages.ViewModels
         private void ClickByClass(string className)
         {
             _browser.ExecuteScriptAsync($"document.getElementsByClassName('{className}')[0].click()");
+        }
+
+        private void ClickByHref(string href)
+        {
+            _browser.ExecuteScriptAsync($"document.querySelectorAll(\"a[href='{href}']\")[0].click()");
+        }
+
+        private void ClickBy(string tagName, string attribute, string value)
+        {
+            _browser.ExecuteScriptAsync($"document.querySelectorAll(\"{tagName}[{attribute}='{value}']\")[0].click()");
         }
 
         private void Disabled(string id, bool value)
@@ -141,7 +178,7 @@ namespace VouwwandImages.ViewModels
             Set("WORKSHOP[CONFIGS][CONFIG][0][WIDTH]", width.ToString());
             Set("WORKSHOP[CONFIGS][CONFIG][0][HEIGHT]", height.ToString());
             Disabled("sendConfiguratorModificationButton", false);
-            Click("sendConfiguratorModificationButton");
+            ClickById("sendConfiguratorModificationButton");
 
             await WaitForStyle("workshop_wait", "display: none;");
 
@@ -166,6 +203,7 @@ namespace VouwwandImages.ViewModels
         private string _maximumHeight;
         private string _stepHeight;
 
+       
         private volatile bool _stop;
 
         public string MinimumWidth
@@ -213,6 +251,43 @@ namespace VouwwandImages.ViewModels
         {
             await ScrapePrices();
             CalculatePrices();
+        }
+
+        public ICommand FastDefaultsCommand
+        {
+            get { return new TargetCommand(FastDefaults); }
+        }
+
+        private async void FastDefaults()
+        {
+            MinimumWidth = "1000";
+            MaximumWidth = "3000";
+            StepWidth = "1000";
+
+            MinimumHeight = "500";
+            MaximumHeight = "2500";
+            StepHeight = "1000";
+
+        }
+
+        public ICommand StandardDefaultsCommand
+        {
+            get { return new TargetCommand(StandardDefaults); }
+        }
+
+        private async void StandardDefaults()
+        {
+            MinimumWidth = "1000";
+            MaximumWidth = "3500";
+            StepWidth = "500";
+
+            MinimumHeight = "1000";
+            MaximumHeight = "2500";
+            StepHeight = "500";
+
+            Bars = "2";
+            Pillars = "2";
+
         }
 
         public ICommand StopCommand
