@@ -1,10 +1,11 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CefSharp;
 using CefSharp.Wpf;
+using VouwwandImages.Robot;
+using VouwwandImages.Robot.Pages;
+using VouwwandImages.Robot.Scripts;
 using VouwwandImages.UI;
 
 namespace VouwwandImages.ViewModels
@@ -12,10 +13,12 @@ namespace VouwwandImages.ViewModels
     public class WebViewModel : PriceCalculation
     {
         private readonly ChromiumWebBrowser _browser;
+        private Context Context { get; }
 
         public WebViewModel(ChromiumWebBrowser browser)
         {
             _browser = browser;
+            Context = new Context(browser);
 
             StandardDefaults();
         }
@@ -26,12 +29,21 @@ namespace VouwwandImages.ViewModels
             get { return new TargetCommand(Login); }
         }
 
-        private void Login()
+        private async void Login()
         {
-            ClickByClass("cookies__button--accept");
-            Set("user-login", "info@kozijnkopen.com");
+            var script = new LoginScript(Context);
+            await script.Run();
+        }
 
-            // SetTextbox("password", "");
+        public ICommand ProductCommand
+        {
+            get { return new TargetCommand(Product); }
+        }
+
+        private async void Product()
+        {
+            var script = new ProductScript(Context);
+            await script.Run();
         }
 
         public ICommand NoGlassCommand
@@ -41,109 +53,10 @@ namespace VouwwandImages.ViewModels
 
         private async void NoGlass()
         {
-            ClickByHref("#menu_sash_0-3");
-
-            ClickBy("div", "data-configurator-target", "[CONFIGS][CONFIG][0][GLAZING]");
-
-            CheckById("BEZ_SZYBY");
-
-            ClickByClass("glass-filter-button-container");
-
-            ClickBy("div", "data-value", "00/BEZ_SZYBY_48");
-
-            await WaitForStyle("workshop_wait", "display: none;");
-
-            Set("WORKSHOP[CONFIGS][CONFIG][0][GLAZING_OPTION][0][PSZ_waga_bsz]", "20");
-
-            // ClickBy( apply)
-
-            ClickByHref("#menu_sash_0-3");
-
+            var script = new NoGlassScript(Context);
+            await script.Run();
         }
-
-        private void Set(string id, string text)
-        {
-            _browser.ExecuteScriptAsync($"document.getElementById('{id}').value= '{text}'");
-        }
-
-        private void CheckById(string id)
-        {
-            _browser.ExecuteScriptAsync($"document.getElementById('{id}').check=true");
-        }
-
-
-        private void ClickById(string id)
-        {
-            _browser.ExecuteScriptAsync($"document.getElementById('{id}').click()");
-        }
-
-        private void Focus(string id)
-        {
-            _browser.ExecuteScriptAsync($"document.getElementById('{id}').focus()");
-        }
-
-        private void Blur(string id)
-        {
-            _browser.ExecuteScriptAsync($"document.getElementById('{id}').blur()");
-        }
-
-        private void ClickByClass(string className)
-        {
-            _browser.ExecuteScriptAsync($"document.getElementsByClassName('{className}')[0].click()");
-        }
-
-        private void ClickByHref(string href)
-        {
-            _browser.ExecuteScriptAsync($"document.querySelectorAll(\"a[href='{href}']\")[0].click()");
-        }
-
-        private void ClickBy(string tagName, string attribute, string value)
-        {
-            _browser.ExecuteScriptAsync($"document.querySelectorAll(\"{tagName}[{attribute}='{value}']\")[0].click()");
-        }
-
-        private void Disabled(string id, bool value)
-        {
-            _browser.ExecuteScriptAsync($"document.getElementById('{id}').disabled={value.ToString().ToLower()}");
-        }
-
-        private async Task<string> GetStyle(string id)
-        {
-            var response = await _browser.EvaluateScriptAsync($"document.getElementById('{id}').getAttribute('style')");
-
-            return (string) response.Result;
-        }
-
-        private async Task<string?> GetId(string id)
-        {
-            var response = await _browser.EvaluateScriptAsync($"document.getElementById('{id}').getAttribute('id')");
-
-            return (string?) response.Result;
-        }
-
-        private async Task<string> GetValue(string id)
-        {
-            var response = await _browser.EvaluateScriptAsync($"document.getElementById('{id}').innerText");
-
-            return (string) response.Result;
-        }
-
-        private async Task WaitForStyle(string id, string style)
-        {
-            DateTime time = DateTime.Now;
-            time = time.AddMinutes(1);
-            while (time > DateTime.Now)
-            {
-                string foundStyle = await GetStyle(id);
-                if (foundStyle == style)
-                {
-                    return;
-                }
-
-                Thread.Sleep(100);
-            }
-        }
-
+        
         private async Task ScrapePrices()
         {
             PriceInput = "";
@@ -175,19 +88,23 @@ namespace VouwwandImages.ViewModels
 
         private async Task ScrapePrice(StringBuilder sb, int width, int height)
         {
-            Set("WORKSHOP[CONFIGS][CONFIG][0][WIDTH]", width.ToString());
-            Set("WORKSHOP[CONFIGS][CONFIG][0][HEIGHT]", height.ToString());
-            Disabled("sendConfiguratorModificationButton", false);
-            ClickById("sendConfiguratorModificationButton");
+            var page = new DimensionPage(Context);
 
-            await WaitForStyle("workshop_wait", "display: none;");
+            await page.Width.Set(width.ToString());
+            await page.Height.Set(height.ToString());
+            await page.Apply.SetDisable(false);
+            await page.Apply.Click();
 
-            string? id = await GetId("configuratorErrorMessage");
+            var waitPage = new ConstructorPage(Context);
+            await waitPage.Wait();
+
+            string? id = await page.ErrorMessage.GetId();
             if (id == null)
             {
-                string price = await GetValue("workshop_price");
+                // string price = await GetValue("workshop_price");
+                string? price = await page.PriceNetto.GetValue();
 
-                sb.AppendLine($"{width}\t{height}\t{price.Replace("€", "").Replace(",", "").Replace(".", ",")}");
+                sb.AppendLine($"{width}\t{height}\t{price?.Replace("€", "").Replace(",", "").Replace(".", ",")}");
             }
 
             Thread.Sleep(500);
