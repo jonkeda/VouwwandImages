@@ -62,14 +62,13 @@ namespace VouwwandImages.UI.Controls
 
         private void RefreshClick(object sender, RoutedEventArgs e)
         {
-            //Browser..Refresh();
+            WebBrowser?.Reload();
         }
 
 
         private void GoClick(object sender, RoutedEventArgs e)
         {
             WebUrl = Url.Text;
-            // WebBrowser?.Forward();
         }
 
     }

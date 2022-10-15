@@ -6,6 +6,7 @@
         xmlns:views="clr-namespace:VouwwandImages.Views"
         xmlns:viewModel="clr-namespace:VouwwandImages.ViewModels"
         xmlns:controls="clr-namespace:VouwwandImages.UI.Controls"
+        xmlns:graphs="clr-namespace:VouwwandImages.UI.Graphs"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=false, Type={x:Type viewModel:MainViewModel}}"
         mc:Ignorable="d" WindowState="Maximized"
         Title="MainWindow" Height="450" Width="800">
@@ -53,6 +54,11 @@
                     <Button Command="{Binding StandardDefaultsCommand}">Standard</Button>
                     <Button Command="{Binding FastDefaultsCommand}">Fast</Button>
 
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Content="Matrix" IsChecked="{Binding CalculateMatrix}" />
+                        <RadioButton Content="Outlines" IsChecked="{Binding CalculateOutlines}" />
+                    </StackPanel>
+
                     <TextBlock Text="Minimum Width"/>
                     <TextBox Text="{Binding MinimumWidth}" ></TextBox>
                     <TextBlock Text="Maximum Width"/>
@@ -92,7 +98,7 @@
 
             </Grid>
         </TabItem>
-        <TabItem Header="Calculator" DataContext="{Binding PriceCalculation}">
+        <TabItem Header="Calculator" DataContext="{Binding Web}">
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -109,7 +115,36 @@
 
                     <Button Command="{Binding CalculatePriceCommand}">Calculate</Button>
                     <TextBox Text="{Binding PriceOutcome}" AcceptsTab="True" AcceptsReturn="True" Height="200"/>
+                    <Button Command="{Binding CreateGraphCommand}">Create graph</Button>
+
+                    <Button Command="{Binding CreateAICommand}">Create AI</Button>
+
                 </StackPanel>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"  />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  IsReadOnly="True" Text="{Binding Text}" />
+                    <graphs:MvvmPlot Grid.Row="1" Grid.Column="0" PlotData="{Binding ByHeight}" Text="{Binding Text}" />
+                    <graphs:MvvmPlot Grid.Row="1" Grid.Column="1" PlotData="{Binding ByWidth}"  Text="{Binding Text}"/>
+                    <graphs:MvvmPlot Grid.Row="1" Grid.Column="2" PlotData="{Binding ByLength}"  Text="{Binding Text}"/>
+
+                    <graphs:MvvmPlot Grid.Row="2" Grid.Column="0" PlotData="{Binding ByHeightDifference}" Text="{Binding Text}"/>
+                    <graphs:MvvmPlot Grid.Row="2" Grid.Column="1" PlotData="{Binding ByWidthDifference}"  Text="{Binding Text}"/>
+                    <graphs:MvvmPlot Grid.Row="2" Grid.Column="2" PlotData="{Binding ByLengthPerMeter}"  Text="{Binding Text}"/>
+
+                    <graphs:MvvmPlot Grid.Row="3" Grid.Column="0" PlotData="{Binding ByHeightPerMeter}" Text="{Binding Text}"/>
+                    <graphs:MvvmPlot Grid.Row="3" Grid.Column="1" PlotData="{Binding ByWidthPerMeter}"  Text="{Binding Text}"/>
+
+                </Grid>
             </Grid>
         </TabItem>
 

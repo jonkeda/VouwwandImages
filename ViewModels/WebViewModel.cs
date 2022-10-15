@@ -212,6 +212,10 @@ namespace VouwwandImages.ViewModels
             get { return new TargetCommand(Stop); }
         }
 
+        public bool CalculateMatrix { get; set; }
+
+        public bool CalculateOutlines { get; set; }
+
         private void Stop()
         {
             _stop = true;
