@@ -1,4 +1,4 @@
-﻿using VouwwandImages.Models.Products;
+﻿using VouwwandImages.Models.ProductDrawings;
 using VouwwandImages.UI;
 
 namespace VouwwandImages.ViewModels

@@ -2,7 +2,7 @@
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using SkiaSharp.Views.WPF;
-using VouwwandImages.Models.Products;
+using VouwwandImages.Models.ProductDrawings;
 
 namespace VouwwandImages.Views;
 

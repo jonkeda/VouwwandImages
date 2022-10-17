@@ -1,8 +1,8 @@
-﻿using SkiaSharp;
-using System.IO;
+﻿using System.IO;
+using SkiaSharp;
 using VouwwandImages.Shapes;
 
-namespace VouwwandImages.Models.Products
+namespace VouwwandImages.Models.ProductDrawings
 {
     public class DrawingModel
     {

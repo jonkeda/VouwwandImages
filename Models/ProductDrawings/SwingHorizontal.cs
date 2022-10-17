@@ -1,4 +1,4 @@
-﻿namespace VouwwandImages.Models.Products;
+﻿namespace VouwwandImages.Models.ProductDrawings;
 
 public enum SwingHorizontal
 {

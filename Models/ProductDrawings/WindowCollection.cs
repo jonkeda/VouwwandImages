@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace VouwwandImages.Models.Products;
+namespace VouwwandImages.Models.ProductDrawings;
 
 public class WindowCollection : Collection<Window>
 {

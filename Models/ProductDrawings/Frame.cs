@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace VouwwandImages.Models.Products;
+namespace VouwwandImages.Models.ProductDrawings;
 
 public class Frame
 {

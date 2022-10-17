@@ -1,18 +1,53 @@
 ﻿using Microsoft.ML;
-using Microsoft.ML.Data;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using VouwwandImages.Extensions;
 using VouwwandImages.UI;
 using VouwwandImages.UI.Graphs;
+using VouwwandImages.ViewModels.Calculations;
+using GeneticSharp.Extensions;
 
 namespace VouwwandImages.ViewModels;
 
+public class PriceCalculatedCollection : Collection<PriceCalculated>
+{}
+
+public class PriceCalculated
+{
+    public double WidthPrice { get; }
+    public double HeightPrice { get; }
+    public double SquarePrice { get; }
+    public double BasePrice { get; }
+    public double PriceDifference { get; }
+
+    public PriceCalculated(double minimumWidthPrice, 
+        double minimumHeightPrice, 
+        double minimumSquarePrice, 
+        double minimumBasePrice, 
+        double minimumPriceDifference)
+    {
+        WidthPrice = minimumWidthPrice;
+        HeightPrice = minimumHeightPrice;
+        SquarePrice = minimumSquarePrice;
+        BasePrice = minimumBasePrice;
+        PriceDifference = minimumPriceDifference;
+    }
+
+    public override string ToString()
+    {
+        return PriceDifference.ToString();
+    }
+}
+
 public class PriceCalculation : ViewModel
 {
+    #region Properties
+
     private string _bars = "1";
     private int _barsCount;
     private string _pillars = "1";
@@ -42,6 +77,74 @@ public class PriceCalculation : ViewModel
         }
     }
 
+    public double MinimumPrice
+    {
+        get { return _minimumPrice; }
+        set { SetProperty(ref _minimumPrice, value); }
+    }
+
+    public double MaximumPrice
+    {
+        get { return _maximumPrice; }
+        set { SetProperty(ref _maximumPrice, value); }
+    }
+
+
+    public double FilterMinimumWidth
+    {
+        get { return _filterMinimumWidth; }
+        set { SetProperty(ref _filterMinimumWidth, value); }
+    }
+
+    public double FilterMaximumWidth
+    {
+        get { return _filterMaximumWidth; }
+        set { SetProperty(ref _filterMaximumWidth, value); }
+    }
+
+
+    public double FilterMinimumHeight
+    {
+        get { return _filterMinimumHeight; }
+        set { SetProperty(ref _filterMinimumHeight, value); }
+    }
+
+    public double FilterMaximumHeight
+    {
+        get { return _filterMaximumHeight; }
+        set { SetProperty(ref _filterMaximumHeight, value); }
+    }
+
+
+    public double FilterMinimumSquare
+    {
+        get { return _filterMinimumSquare; }
+        set { SetProperty(ref _filterMinimumSquare, value); }
+    }
+
+    public double FilterMaximumSquare
+    {
+        get { return _filterMaximumSquare; }
+        set { SetProperty(ref _filterMaximumSquare, value); }
+    }
+
+    public double FilterMinimumLength
+    {
+        get { return _filterMinimumLength; }
+        set { SetProperty(ref _filterMinimumLength, value); }
+    }
+
+    public double FilterMaximumLength
+    {
+        get { return _filterMaximumLength; }
+        set { SetProperty(ref _filterMaximumLength, value); }
+    }
+
+
+    #endregion
+
+    #region Calculate Prices
+
     private ProductPriceCollection GetProductPrices()
     {
         var priceText = PriceInput;
@@ -53,10 +156,16 @@ public class PriceCalculation : ViewModel
             if (!string.IsNullOrWhiteSpace(line))
             {
                 string[] values = line.Split('\t');
-                prices.Add(new ProductPrice(int.Parse(values[0]), int.Parse(values[1]), double.Parse(values[2])));
+                var price = new ProductPrice(int.Parse(values[0]), int.Parse(values[1]), double.Parse(values[2]));
+                if (price.WidthI >= FilterMinimumWidth && price.WidthI <= FilterMaximumWidth
+                       && price.HeightI >= FilterMinimumHeight&& price.HeightI <= FilterMaximumHeight
+                       && price.SquareI >= FilterMinimumSquare && price.SquareI <= FilterMaximumSquare
+                       && price.LengthI >= FilterMinimumLength && price.LengthI <= FilterMaximumLength)
+                {
+                    prices.Add(price);
+                }
             }
         }
-
         return prices;
     }
 
@@ -65,43 +174,46 @@ public class PriceCalculation : ViewModel
         PriceOutcome = "";
 
         StringBuilder sb = new StringBuilder();
-
         var prices = GetProductPrices();
 
         int bars = _barsCount;
         int pillars = _pillarsCount;
-        double maxBasePrice = 100;
+        double minPrice = MinimumPrice;
+        double maxPrice = MaximumPrice;
+        double stepPrice = maxPrice / 16;
+        //double stepPrice = double.Parse(StepPrice);
+        /*
 
-        (double minimumWidthPrice, double minimumHeightPrice, double minimumBasePrice, double minimumPriceDifference) = CalculatePrices(sb,
-            prices,
-            0, maxBasePrice * 2,
-            0, maxBasePrice,
-            0, maxBasePrice,
-            10,
-            bars, pillars);
+                (double minimumWidthPrice, double minimumHeightPrice, double minimumBasePrice, double minimumPriceDifference) = CalculatePrices(sb,
+                    prices,
+                    0, maxBasePrice * 2,
+                    0, maxBasePrice,
+                    0, maxBasePrice,
+                    10,
+                    bars, pillars);
 
-        (minimumWidthPrice, minimumHeightPrice, minimumBasePrice, minimumPriceDifference) = CalculatePrices(sb,
-            prices,
-            0, maxBasePrice * 2,
-            minimumWidthPrice - 10, minimumWidthPrice + 10,
-            minimumHeightPrice - 10, minimumHeightPrice + 10,
-            1,
-            bars, pillars);
+                (minimumWidthPrice, minimumHeightPrice, minimumBasePrice, minimumPriceDifference) = CalculatePrices(sb,
+                    prices,
+                    0, maxBasePrice * 2,
+                    minimumWidthPrice - 10, minimumWidthPrice + 10,
+                    minimumHeightPrice - 10, minimumHeightPrice + 10,
+                    1,
+                    bars, pillars);
 
-        sb.AppendLine($"{minimumWidthPrice}\t{minimumHeightPrice}\t{minimumBasePrice}\t{minimumPriceDifference:0}");
-
-
-        (var minimumLengthPrice, var minimumPlusPrice, minimumBasePrice, minimumPriceDifference) = CalculatePricesV2(sb,
-            prices,
-            0, maxBasePrice,
-            0, maxBasePrice,
-            0, maxBasePrice,
-            1,
-            bars, pillars);
-        sb.AppendLine($"{minimumLengthPrice}\t{minimumPlusPrice:F1}\t{minimumBasePrice}\t{minimumPriceDifference:0}");
+                sb.AppendLine($"{minimumWidthPrice}\t{minimumHeightPrice}\t{minimumBasePrice}\t{minimumPriceDifference:0}");
 
 
-        PriceResults = GetPriceResults(prices, minimumLengthPrice, minimumPlusPrice, minimumBasePrice, bars, pillars);
+                (var minimumLengthPrice, var minimumPlusPrice, minimumBasePrice, minimumPriceDifference) = CalculatePricesV2(sb,
+                    prices,
+                    0, maxBasePrice,
+                    0, maxBasePrice,
+                    0, maxBasePrice,
+                    1,
+                    bars, pillars);
+                sb.AppendLine($"{minimumLengthPrice}\t{minimumPlusPrice:F1}\t{minimumBasePrice}\t{minimumPriceDifference:0}");
+        */
+
+        /* PriceResults = GetPriceResults(prices, minimumLengthPrice, minimumPlusPrice, minimumBasePrice, bars, pillars); */
 
         /*        (minimumWidthPrice, minimumHeightPrice, minimumBasePrice, minimumPriceDifference) = CalculatePricesV2(sb,
                     prices,
@@ -110,9 +222,85 @@ public class PriceCalculation : ViewModel
                     minimumHeightPrice - 10, minimumHeightPrice + 10,
                     1);
         */
+        double magnify = 2;
+        DateTime start = DateTime.Now;
+        var calculatedPrices = CalculatePricesV3(sb,
+            prices,
+            minPrice, maxPrice,
+            minPrice, maxPrice,
+            minPrice, maxPrice,
+            minPrice, maxPrice,
+                stepPrice,
+                bars, pillars);
+        sb.AppendLine((DateTime.Now - start).TotalMilliseconds.ToString());
+        start = DateTime.Now;
+        foreach (var c in calculatedPrices)
+        {
+            sb.AppendLine($"w: {c.WidthPrice:F2}\th: {c.HeightPrice:F2}\tS: {c.SquarePrice:F2}\tB:{c.BasePrice:F2}\tD: {c.PriceDifference:F2}");
+        }
 
+        var startMax = maxPrice;
+        maxPrice /= magnify;
+        // stepPrice /= magnify;
 
-        PriceOutcome = sb.ToString();
+        for (int i = 0; i < 10; i++)
+        {
+            var minimum = calculatedPrices.First();
+
+            calculatedPrices = CalculatePricesV3(sb,
+                prices,
+                Math.Max(0, minimum.WidthPrice - maxPrice), Math.Min(startMax, minimum.WidthPrice + maxPrice),
+                Math.Max(0, minimum.HeightPrice - maxPrice), Math.Min(startMax, minimum.HeightPrice + maxPrice),
+                Math.Max(0, minimum.SquarePrice - maxPrice), Math.Min(startMax, minimum.SquarePrice + maxPrice),
+                Math.Max(0, minimum.BasePrice - maxPrice), Math.Min(startMax, minimum.BasePrice + maxPrice),
+                stepPrice,
+                bars, pillars);
+
+            sb.AppendLine();
+            sb.AppendLine((DateTime.Now - start).TotalMilliseconds.ToString());
+            start = DateTime.Now;
+            foreach (var c in calculatedPrices)
+            {
+                sb.AppendLine($"w: {c.WidthPrice:F2}\th: {c.HeightPrice:F2}\tS: {c.SquarePrice:F2}\tB:{c.BasePrice:F2}\tD: {c.PriceDifference:F2}");
+            }
+            maxPrice /= magnify;
+            stepPrice /= magnify;
+
+        }
+
+        // sb.AppendLine($"{minimumWidthPrice:F0}\t{minimumHeightPrice:F0}\t{minimumSquarePrice:F0}\t{minimumBasePrice:F0}");
+
+        /*
+                sb.AppendLine($"w: {minimumWidthPrice:F2} h: {minimumHeightPrice:F2} S: {minimumSquarePrice:F2} B:{minimumBasePrice:F2} D: {minimumPriceDifference:F2}");
+                sb.AppendLine($"{minimumWidthPrice:F0}\t{minimumHeightPrice:F0}\t{minimumSquarePrice:F0}\t{minimumBasePrice:F0}");
+
+                (minimumWidthPrice, minimumHeightPrice, minimumSquarePrice, minimumBasePrice, minimumPriceDifference) = CalculatePricesV3(sb,
+                    prices,
+                    minimumWidthPrice - stepPrice, minimumWidthPrice + stepPrice,
+                    minimumHeightPrice - stepPrice, minimumHeightPrice + stepPrice,
+                    minimumSquarePrice - stepPrice, minimumSquarePrice + stepPrice,
+                    minimumBasePrice - stepPrice, minimumBasePrice + stepPrice,
+                    stepPrice = stepPrice / 10,
+                    bars, pillars);
+                sb.AppendLine($"w: {minimumWidthPrice:F2} h: {minimumHeightPrice:F2} S: {minimumSquarePrice:F2} B:{minimumBasePrice:F2} D: {minimumPriceDifference:F2}");
+                sb.AppendLine($"{minimumWidthPrice:F2}\t{minimumHeightPrice:F2}\t{minimumSquarePrice:F2}\t{minimumBasePrice:F2}");
+
+                (minimumWidthPrice, minimumHeightPrice, minimumSquarePrice, minimumBasePrice, minimumPriceDifference) = CalculatePricesV3(sb,
+                    prices,
+                    minimumWidthPrice - stepPrice, minimumWidthPrice + stepPrice,
+                    minimumHeightPrice - stepPrice, minimumHeightPrice + stepPrice,
+                    minimumSquarePrice - stepPrice, minimumSquarePrice + stepPrice,
+                    minimumBasePrice - stepPrice, minimumBasePrice + stepPrice,
+                    stepPrice = stepPrice / 10,
+                    bars, pillars);
+                sb.AppendLine($"w: {minimumWidthPrice:F2} h: {minimumHeightPrice:F2} S: {minimumSquarePrice:F2} B:{minimumBasePrice:F2} D: {minimumPriceDifference:F2}");
+                sb.AppendLine($"{minimumWidthPrice:F2}\t{minimumHeightPrice:F2}\t{minimumSquarePrice:F2}\t{minimumBasePrice:F2}");
+        */
+
+        var mc = calculatedPrices.First();
+        PriceOutcome =
+            $"{mc.WidthPrice:F2}\t{mc.HeightPrice:F2}\t{mc.SquarePrice:F2}\t{mc.BasePrice:F2}\t{mc.PriceDifference:F2}\n"
+            + sb;
     }
 
     private string GetPriceResults(ProductPriceCollection prices, double lengthPrice, double plusPrice, double basePrice,
@@ -221,7 +409,80 @@ public class PriceCalculation : ViewModel
         return (minimumLengthPrice, minimumPlusPrice, minimumBasePrice, minimumPriceDifference);
     }
 
-    #region Stepping
+    #endregion
+
+    #region Calculate Prices V3
+
+    // 66B+70A+10BA+54
+    private List<PriceCalculated> CalculatePricesV3(StringBuilder sb,
+            ProductPriceCollection prices,
+            double minWidth, double maxWidth,
+            double minHeight, double maxHeight,
+            double minSquare, double maxSquare,
+            double minBase, double maxBase,
+            double step,
+            int bars, int pillars)
+    {
+        double minimumPriceDifference = double.MaxValue;
+
+/*        double minimumWidthPrice = 0;
+        double minimumHeightPrice = 0;
+        double minimumSquarePrice = 0;
+        double minimumBasePrice = 0;
+*/
+        List<PriceCalculated> calculatedPrices = new List<PriceCalculated>();
+        for (double basePrice = minBase; basePrice < maxBase; basePrice += step)
+        {
+            for (double widthPrice = minWidth; widthPrice < maxWidth; widthPrice += step)
+            {
+                for (double heightPrice = minHeight; heightPrice < maxHeight; heightPrice += step)
+                {
+                    for (double squarePrice = minSquare; squarePrice < maxSquare; squarePrice += step)
+                    {
+
+                        double totalPrice = 0;
+                        foreach (ProductPrice p in prices)
+                        {
+                            double fullWidth = p.Width * bars;
+                            double fullHeight = p.Height * pillars;
+                            double fullSquare = p.Height * p.Width;
+                            //double length = p.Height * pillars + p.Width * bars;
+
+                            double price = fullWidth * widthPrice 
+                                + fullHeight * heightPrice
+                                + fullSquare * squarePrice
+                                + basePrice;
+
+                            totalPrice += Math.Abs(p.Price - price);
+                        }
+
+                        if (calculatedPrices.Count < 2
+                            || minimumPriceDifference > totalPrice)
+                        {
+                            calculatedPrices.Add(new PriceCalculated(widthPrice, 
+                                heightPrice, 
+                                squarePrice, 
+                                basePrice, 
+                                totalPrice));
+                            calculatedPrices = calculatedPrices.OrderBy(c => c.PriceDifference).ToList();
+
+                            if (calculatedPrices.Count > 2)
+                            {
+                                calculatedPrices.RemoveAt(calculatedPrices.Count - 1);
+                            }
+                            minimumPriceDifference = calculatedPrices.Last().PriceDifference;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return calculatedPrices;
+    }
+    #endregion
+
+    #region Plot prices
 
     private string _priceOutcome = "";
     private string _priceInput = "";
@@ -237,6 +498,23 @@ public class PriceCalculation : ViewModel
     private PlotData? _byLengthPerMeter;
     private PlotData? _byWidthPerMeter;
     private PlotData? _byHeightPerMeter;
+    private FunctionBuilderRunner? _builder;
+
+    private double _maximumOperations = 11;
+    private double _minimumPrice = 0;
+    private double _maximumPrice = 2048;
+
+    private double _filterMinimumWidth = 0;
+    private double _filterMaximumWidth = 10000;
+
+    private double _filterMinimumHeight = 0;
+    private double _filterMaximumHeight = 10000;
+
+    private double _filterMinimumSquare = 0;
+    private double _filterMaximumSquare = 100000000;
+
+    private double _filterMinimumLength = 0;
+    private double _filterMaximumLength = 10000;
 
     public string PriceInput
     {
@@ -496,7 +774,7 @@ public class PriceCalculation : ViewModel
         // mlContext.Data.LoadFromTextFile<ProductPrice>(TrainDataPath, hasHeader: true, separatorChar: ',');
         // IDataView testDataView = mlContext.Data.LoadFromTextFile<ProductPrice>(TestDataPath, hasHeader: true, separatorChar: ',');
 
-        
+
 
         // Sample code of removing extreme data like "outliers" for FareAmounts higher than $150 and lower than $1 which can be error-data 
         //var cnt = baseTrainingDataView.GetColumn<float>(nameof(ProductPrice.Price)).Count();
@@ -512,7 +790,7 @@ public class PriceCalculation : ViewModel
                                     .Append(mlContext.Transforms.NormalizeMeanVariance(outputColumnName: nameof(ProductPrice.HeightF)))
                                     .Append(mlContext.Transforms.NormalizeMeanVariance(outputColumnName: nameof(ProductPrice.WidthF)))
                                     //.Append(mlContext.Transforms.NormalizeMeanVariance(outputColumnName: nameof(TaxiTrip.TripDistance)))
-                                    .Append(mlContext.Transforms.Concatenate("Features", 
+                                    .Append(mlContext.Transforms.Concatenate("Features",
                                         nameof(ProductPrice.HeightF), nameof(ProductPrice.WidthF), nameof(ProductPrice.PriceF)))
                                     ;
 
@@ -524,7 +802,7 @@ public class PriceCalculation : ViewModel
         // STEP 4: train
         var trainedModel = trainingPipeline.Fit(baseTrainingDataView);
 
-        
+
         // mlContext.Model.Save(trainedModel, );
 
         // STEP 5: Predict
@@ -539,14 +817,60 @@ public class PriceCalculation : ViewModel
     }
 
     #endregion
-}
 
-public class ProductPricePrediction
-{
-    [ColumnName("Score")]
-    public float Score;
+    #region Function Builder
 
-    [ColumnName("Label")]
-    public float PriceF;
+    public double MaximumOperations
+    {
+        get { return _maximumOperations; }
+        set { SetProperty(ref _maximumOperations, value); }
+    }
 
+    public FunctionBuilderRunner? Builder
+    {
+        get { return _builder; }
+        set { SetProperty(ref _builder, value); }
+    }
+
+    public ICommand CreateFunctionBuilderCommand
+    {
+        get { return new TargetTaskCommand(CreateFunctionBuilder); }
+    }
+
+    private async Task CreateFunctionBuilder()
+    {
+        List<FunctionBuilderInput> inputs = new List<FunctionBuilderInput>();
+        foreach (var price in GetProductPrices())
+        {
+            FunctionBuilderInput input = new FunctionBuilderInput(new List<double>() { price.Height, price.Width }, price.Price);
+            inputs.Add(input);
+        }
+
+        var maxOperations = (int)MaximumOperations;
+
+        Builder = new FunctionBuilderRunner(new FunctionBuilder(inputs, maxOperations));
+        await Task.Factory.StartNew(Builder.Run);
+    }
+
+    public ICommand StopFunctionBuilderCommand
+    {
+        get { return new TargetCommand(StopFunctionBuilder); }
+    }
+
+    private void StopFunctionBuilder()
+    {
+        Builder?.Stop();
+    }
+
+    public ICommand ResumeFunctionBuilderCommand
+    {
+        get { return new TargetCommand(ResumeFunctionBuilder); }
+    }
+
+    private void ResumeFunctionBuilder()
+    {
+        Builder?.Resume();
+    }
+
+    #endregion
 }

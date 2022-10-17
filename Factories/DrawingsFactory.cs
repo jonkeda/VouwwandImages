@@ -1,7 +1,7 @@
 ﻿using System.Threading.Channels;
 using SkiaSharp;
 using VouwwandImages.Images;
-using VouwwandImages.Models.Products;
+using VouwwandImages.Models.ProductDrawings;
 using VouwwandImages.Shapes;
 using Line = VouwwandImages.Shapes.Line;
 using Rectangle = VouwwandImages.Shapes.Rectangle;

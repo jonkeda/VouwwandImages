@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
-namespace VouwwandImages.Models.Products
+namespace VouwwandImages.Models.ProductDrawings
 {
     public class WindowTypes
     {

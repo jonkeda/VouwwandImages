@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows.Input;
 using Microsoft.Win32;
 using VouwwandImages.Factories;
-using VouwwandImages.Models.Products;
+using VouwwandImages.Models.ProductDrawings;
 using VouwwandImages.UI;
 
 namespace VouwwandImages.ViewModels;

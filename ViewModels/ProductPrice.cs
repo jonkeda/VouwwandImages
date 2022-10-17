@@ -24,6 +24,13 @@
                 return (float) Width;
             }
         }
+        public int WidthI
+        {
+            get
+            {
+                return (int)(Width*1000d);
+            }
+        }
 
         public double Height { get; set; }
         public float HeightF
@@ -31,6 +38,13 @@
             get
             {
                 return (float)Height;
+            }
+        }
+        public float HeightI
+        {
+            get
+            {
+                return (int)(Height*1000d);
             }
         }
 
@@ -51,5 +65,30 @@
                 return Height * 2 + Width * 2;
             }
         }
+
+        public double LengthI
+        {
+            get
+            {
+                return HeightI * 2 + WidthI * 2;
+            }
+        }
+
+        public double Square
+        {
+            get
+            {
+                return Height * Width;
+            }
+        }
+
+        public double SquareI
+        {
+            get
+            {
+                return HeightI * WidthI;
+            }
+        }
+
     }
 }
