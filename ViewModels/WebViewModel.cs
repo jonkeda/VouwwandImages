@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CefSharp.Wpf;
+using VouwwandImages.Database;
 using VouwwandImages.Robot;
 using VouwwandImages.Robot.Pages;
 using VouwwandImages.Robot.Scripts;
@@ -12,12 +13,11 @@ namespace VouwwandImages.ViewModels
 {
     public class WebViewModel : PriceCalculation
     {
-        private readonly ChromiumWebBrowser _browser;
         private Context Context { get; }
 
-        public WebViewModel(ChromiumWebBrowser browser)
+        public WebViewModel(ChromiumWebBrowser browser, 
+            VouwwandenDbContext dbContext) : base(dbContext)
         {
-            _browser = browser;
             Context = new Context(browser);
 
             StandardDefaults();

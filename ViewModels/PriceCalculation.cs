@@ -11,6 +11,7 @@ using VouwwandImages.UI;
 using VouwwandImages.UI.Graphs;
 using VouwwandImages.ViewModels.Calculations;
 using GeneticSharp.Extensions;
+using VouwwandImages.Database;
 
 namespace VouwwandImages.ViewModels;
 
@@ -44,7 +45,7 @@ public class PriceCalculated
     }
 }
 
-public class PriceCalculation : ViewModel
+public class PriceCalculation : StoreDataViewModel
 {
     #region Properties
 
@@ -492,7 +493,7 @@ public class PriceCalculation : ViewModel
 
     private PlotData? _byHeightDifference;
     private PlotData? _byWidthDifference;
-    private string _text;
+    private string _text = null!;
     private PlotData? _byLength;
 
     private PlotData? _byLengthPerMeter;
@@ -873,4 +874,8 @@ public class PriceCalculation : ViewModel
     }
 
     #endregion
+
+    public PriceCalculation(VouwwandenDbContext dbContext) : base(dbContext)
+    {
+    }
 }

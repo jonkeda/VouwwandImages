@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="VouwwandImages.Views.Data"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VouwwandImages.Views"
+             xmlns:viewModel="clr-namespace:VouwwandImages.ViewModels"
+             d:DataContext="{d:DesignInstance IsDesignTimeCreatable=false, Type={x:Type viewModel:DataViewModel}}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <TabControl>
+        <TabItem Header="Brand">
+            <Grid>
+                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Brands}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
+        <TabItem Header="ProductType">
+            <Grid>
+                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding ProductTypes}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Measurements">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Brand" />
+                <ComboBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Brands}" 
+                          SelectedItem="{Binding SelectedBrand}" Width="200"/>
+
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="Product type" />
+                <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ProductTypes}"
+                          SelectedItem="{Binding SelectedProductType}" Width="200"/>
+
+
+                <DataGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" AutoGenerateColumns="False" ItemsSource="{Binding Measurements}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
+
+    </TabControl>
+</UserControl>

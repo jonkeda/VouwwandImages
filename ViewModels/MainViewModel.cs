@@ -1,4 +1,5 @@
 ﻿using CefSharp.Wpf;
+using VouwwandImages.Database;
 using VouwwandImages.UI;
 
 namespace VouwwandImages.ViewModels;
@@ -8,13 +9,18 @@ public class MainViewModel : ViewModel
 
     public MainViewModel(ChromiumWebBrowser? chromiumWebBrowser)
     {
-        Web = new WebViewModel(chromiumWebBrowser);
+        VouwwandenDbContext dbContext = App.GetService<VouwwandenDbContext>();
+
+        Web = new WebViewModel(chromiumWebBrowser, dbContext);
+
+        Translator = App.GetService<TranslatorViewModel>();
+        Images = App.GetService<ImagesViewModel>();
     }
 
-    public TranslatorViewModel Translator { get; set; } = new();
+    public TranslatorViewModel Translator { get; } 
 
-    public ImagesViewModel Images { get; set; } = new();
+    public ImagesViewModel Images { get; }
 
-    public WebViewModel Web { get; set; }
+    public WebViewModel Web { get; }
 
 }

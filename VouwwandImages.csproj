@@ -21,6 +21,9 @@
     <PackageReference Include="GeneticSharp.Extensions" Version="3.1.2" />
     <PackageReference Include="Google.Cloud.Translation.V2" Version="3.1.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.ML" Version="1.7.1" />
     <PackageReference Include="ScottPlot.WPF" Version="4.1.58" />
     <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.3" />

@@ -7,6 +7,7 @@
         xmlns:viewModel="clr-namespace:VouwwandImages.ViewModels"
         xmlns:controls="clr-namespace:VouwwandImages.UI.Controls"
         xmlns:graphs="clr-namespace:VouwwandImages.UI.Graphs"
+        xmlns:uc="clr-namespace:VouwwandImages.Views"
         d:DataContext="{d:DesignInstance IsDesignTimeCreatable=false, Type={x:Type viewModel:MainViewModel}}"
         mc:Ignorable="d" WindowState="Maximized"
         Title="MainWindow" Height="450" Width="800">
@@ -216,7 +217,49 @@
                 </Grid>
             </Grid>
         </TabItem>
+        <TabItem Header="Store" DataContext="{Binding Web}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <TextBlock Text="Brand" />
+                    <ComboBox ItemsSource="{Binding Brands}" 
+                              SelectedItem="{Binding SelectedBrand}" Width="200"/>
+
+                    <TextBlock Text="Product type" />
+                    <ComboBox ItemsSource="{Binding ProductTypes}"
+                              SelectedItem="{Binding SelectedProductType}" Width="200"/>
+
+                    <TextBlock Text="Profile" />
+                    <TextBox Text="{Binding NewProfile}" />
+                    <ComboBox ItemsSource="{Binding Profile}"
+                              SelectedItem="{Binding SelectedProfile}" Width="200"/>
+
+                    <TextBlock Text="Distribution" />
+                    <TextBox Text="{Binding NewDistribution}" />
+                    <ComboBox ItemsSource="{Binding Distribution}"
+                              SelectedItem="{Binding SelectedDistribution}" Width="200"/>
+
+                    <TextBlock Text="Glass" />
+                    <TextBox Text="{Binding NewGlass}" />
+                    <ComboBox ItemsSource="{Binding Glass}"
+                              SelectedItem="{Binding SelectedGlass}" Width="200"/>
+
+                </StackPanel>
+
+
+
+            </Grid>
+        </TabItem>
         <TabItem Header="Images" DataContext="{Binding Images }">
             <Grid>
                 <Grid.RowDefinitions>
@@ -242,6 +285,10 @@
                 <views:DrawingView Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" 
                                    Drawing="{Binding SelectedDrawing}" />
             </Grid>
+        </TabItem>
+
+        <TabItem Header="Data">
+            <uc:Data />
         </TabItem>
     </TabControl>
 </Window>
