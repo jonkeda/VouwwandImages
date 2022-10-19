@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using VouwwandImages.Database;
 using VouwwandImages.UI;
 
@@ -63,6 +64,21 @@ namespace VouwwandImages.ViewModels
                     NotifyPropertyChanged(nameof(Measurements));
                 }
             }
+        }
+
+        public ICommand RefreshCommand
+        {
+            get
+            {
+                return new TargetCommand(Refresh);
+            }
+        }
+
+        private void Refresh()
+        {
+            NotifyPropertyChanged(nameof(Brands));
+            NotifyPropertyChanged(nameof(ProductTypes));
+            NotifyPropertyChanged(nameof(Measurements));
         }
     }
 }

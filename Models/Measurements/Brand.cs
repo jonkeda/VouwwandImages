@@ -28,12 +28,20 @@ namespace VouwwandImages.Models.Measurements
 
     }
 
+    public interface IColors
+    {
+        string? RalInside { get; set; }
+        string? RalOutside { get; set; }
+        string? RalSashInside { get; set; }
+        string? RalSashOutside { get; set; }
+    }
+
     public interface IGlazing
     {
-        string FillingType { get; set; }
-        string Glazing { get; set; }
-        string GlazingBeads { get; set; }
-        string WarmEdgeSpace { get; set; }
+        string? FillingType { get; set; }
+        string? Glazing { get; set; }
+        string? GlazingBeads { get; set; }
+        string? WarmEdgeSpace { get; set; }
     }
 
     public class Measurement : ISize

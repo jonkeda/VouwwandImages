@@ -91,55 +91,7 @@ public class PriceCalculation : StoreDataViewModel
     }
 
 
-    public double FilterMinimumWidth
-    {
-        get { return _filterMinimumWidth; }
-        set { SetProperty(ref _filterMinimumWidth, value); }
-    }
 
-    public double FilterMaximumWidth
-    {
-        get { return _filterMaximumWidth; }
-        set { SetProperty(ref _filterMaximumWidth, value); }
-    }
-
-
-    public double FilterMinimumHeight
-    {
-        get { return _filterMinimumHeight; }
-        set { SetProperty(ref _filterMinimumHeight, value); }
-    }
-
-    public double FilterMaximumHeight
-    {
-        get { return _filterMaximumHeight; }
-        set { SetProperty(ref _filterMaximumHeight, value); }
-    }
-
-
-    public double FilterMinimumSquare
-    {
-        get { return _filterMinimumSquare; }
-        set { SetProperty(ref _filterMinimumSquare, value); }
-    }
-
-    public double FilterMaximumSquare
-    {
-        get { return _filterMaximumSquare; }
-        set { SetProperty(ref _filterMaximumSquare, value); }
-    }
-
-    public double FilterMinimumLength
-    {
-        get { return _filterMinimumLength; }
-        set { SetProperty(ref _filterMinimumLength, value); }
-    }
-
-    public double FilterMaximumLength
-    {
-        get { return _filterMaximumLength; }
-        set { SetProperty(ref _filterMaximumLength, value); }
-    }
 
 
     #endregion
@@ -505,17 +457,6 @@ public class PriceCalculation : StoreDataViewModel
     private double _minimumPrice = 0;
     private double _maximumPrice = 2048;
 
-    private double _filterMinimumWidth = 0;
-    private double _filterMaximumWidth = 10000;
-
-    private double _filterMinimumHeight = 0;
-    private double _filterMaximumHeight = 10000;
-
-    private double _filterMinimumSquare = 0;
-    private double _filterMaximumSquare = 100000000;
-
-    private double _filterMinimumLength = 0;
-    private double _filterMaximumLength = 10000;
 
     public string PriceInput
     {

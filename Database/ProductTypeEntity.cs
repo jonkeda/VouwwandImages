@@ -10,6 +10,9 @@ public class ProductTypeEntity
     public ProductType Type { get; set; }
 
     [StringLength(100)]
+    public string? Code { get; set; }
+
+    [StringLength(100)]
     public string? Name { get; set; }
 
     public override string ToString()

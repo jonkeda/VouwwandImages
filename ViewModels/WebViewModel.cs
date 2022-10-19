@@ -215,6 +215,7 @@ namespace VouwwandImages.ViewModels
         public bool CalculateMatrix { get; set; }
 
         public bool CalculateOutlines { get; set; }
+        
 
         private void Stop()
         {

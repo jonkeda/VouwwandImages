@@ -2,15 +2,13 @@
 
 namespace VouwwandImages.Database;
 
-public class BrandEntity
+public class ColorEntity
 {
     [Key]
     public int Id { get; set; }
 
     [StringLength(100)]
     public string? Code { get; set; }
-
-    public Brand Brand { get; set; }
 
     [StringLength(100)]
     public string? Name { get; set; }

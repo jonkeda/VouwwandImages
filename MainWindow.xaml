@@ -226,11 +226,17 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="300"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0" Grid.Row="0">
+                <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Orientation="Horizontal">
+                    <Button Command="{Binding RefreshCommand}">Refresh</Button>
+                    <Button Command="{Binding SaveMeasurementCommand}">Save</Button>
+                </StackPanel>
+
+                <StackPanel Grid.Column="0" Grid.Row="1">
                     <TextBlock Text="Brand" />
                     <ComboBox ItemsSource="{Binding Brands}" 
                               SelectedItem="{Binding SelectedBrand}" Width="200"/>
@@ -240,22 +246,109 @@
                               SelectedItem="{Binding SelectedProductType}" Width="200"/>
 
                     <TextBlock Text="Profile" />
-                    <TextBox Text="{Binding NewProfile}" />
-                    <ComboBox ItemsSource="{Binding Profile}"
+                    <TextBox Text="{Binding NewProfileName}" />
+                    <ComboBox ItemsSource="{Binding Profiles}"
                               SelectedItem="{Binding SelectedProfile}" Width="200"/>
 
                     <TextBlock Text="Distribution" />
-                    <TextBox Text="{Binding NewDistribution}" />
-                    <ComboBox ItemsSource="{Binding Distribution}"
+                    <TextBox Text="{Binding NewDistributionName}" />
+                    <ComboBox ItemsSource="{Binding Distributions}"
                               SelectedItem="{Binding SelectedDistribution}" Width="200"/>
 
                     <TextBlock Text="Glass" />
-                    <TextBox Text="{Binding NewGlass}" />
-                    <ComboBox ItemsSource="{Binding Glass}"
+                    <TextBox Text="{Binding NewGlassCode}" />
+                    <TextBox Text="{Binding NewGlassName}" />
+                    <ComboBox ItemsSource="{Binding Glazing}"
                               SelectedItem="{Binding SelectedGlass}" Width="200"/>
+
+                    <TextBlock Text="Color Ral Inside" />
+                    <TextBox Text="{Binding NewRalInsideCode}" />
+                    <TextBox Text="{Binding NewRalInsideName}" />
+                    <ComboBox ItemsSource="{Binding Colors}"
+                              SelectedItem="{Binding SelectedRalInside}" Width="200"/>
+
+                    <TextBlock Text="Color Ral Outside" />
+                    <TextBox Text="{Binding NewRalOutsideCode}" />
+                    <TextBox Text="{Binding NewRalOutsideName}" />
+                    <ComboBox ItemsSource="{Binding Colors}"
+                              SelectedItem="{Binding SelectedRalOutside}" Width="200"/>
+
+                    <TextBlock Text="Color Ral Sash Inside" />
+                    <TextBox Text="{Binding NewRalSashInsideCode}" />
+                    <TextBox Text="{Binding NewRalSashInsideName}" />
+                    <ComboBox ItemsSource="{Binding Colors}"
+                              SelectedItem="{Binding SelectedRalSashInside}" Width="200"/>
+
+                    <TextBlock Text="Color Ral Sash Outside" />
+                    <TextBox Text="{Binding NewRalSashOutsideCode}" />
+                    <TextBox Text="{Binding NewRalSashOutsideName}" />
+                    <ComboBox ItemsSource="{Binding Colors}"
+                              SelectedItem="{Binding SelectedRalSashOutside}" Width="200"/>
 
                 </StackPanel>
 
+                <StackPanel Grid.Row="1" Grid.Column="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Sizes"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Width Minimum"/>
+                        <controls:NumberBox Grid.Row="2" Grid.Column="0" DoubleValue="{Binding MinimumWidth}" DecimalPlaces="0" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="Maximum"/>
+                        <controls:NumberBox Grid.Row="2" Grid.Column="1" DoubleValue="{Binding MaximumWidth}" DecimalPlaces="0" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Height Minimum"/>
+                        <controls:NumberBox Grid.Row="4" Grid.Column="0" DoubleValue="{Binding MinimumHeight}" DecimalPlaces="0" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="Maximum"/>
+                        <controls:NumberBox Grid.Row="4" Grid.Column="1" DoubleValue="{Binding MaximumHeight}" DecimalPlaces="0" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="Filter"/>
+                        <TextBlock Grid.Row="6" Grid.Column="0" Text="Width Minimum"/>
+                        <controls:NumberBox Grid.Row="7" Grid.Column="0" DoubleValue="{Binding FilterMinimumWidth}" DecimalPlaces="0" />
+                        <TextBlock Grid.Row="6" Grid.Column="1" Text="Maximum"/>
+                        <controls:NumberBox Grid.Row="7" Grid.Column="1" DoubleValue="{Binding FilterMaximumWidth}" DecimalPlaces="0" />
+
+                        <TextBlock Grid.Row="8" Grid.Column="0" Text="Height Minimum"/>
+                        <controls:NumberBox Grid.Row="9" Grid.Column="0" DoubleValue="{Binding FilterMinimumHeight}" DecimalPlaces="0" ></controls:NumberBox>
+                        <TextBlock Grid.Row="8" Grid.Column="1" Text="Maximum"/>
+                        <controls:NumberBox Grid.Row="9" Grid.Column="1" DoubleValue="{Binding FilterMaximumHeight}" DecimalPlaces="0" ></controls:NumberBox>
+
+                        <TextBlock Grid.Row="10" Grid.Column="0" Text="Length Minimum"/>
+                        <controls:NumberBox Grid.Row="11" Grid.Column="0" DoubleValue="{Binding FilterMinimumLength}" DecimalPlaces="0" ></controls:NumberBox>
+                        <TextBlock Grid.Row="10" Grid.Column="1" Text="Maximum"/>
+                        <controls:NumberBox Grid.Row="11" Grid.Column="1" DoubleValue="{Binding FilterMaximumLength}" DecimalPlaces="0" ></controls:NumberBox>
+
+                        <TextBlock Grid.Row="12" Grid.Column="0" Text="Square Minimum"/>
+                        <controls:NumberBox Grid.Row="13" Grid.Column="0" DoubleValue="{Binding FilterMinimumSquare}" DecimalPlaces="0" ></controls:NumberBox>
+                        <TextBlock Grid.Row="12" Grid.Column="1" Text="Maximum"/>
+                        <controls:NumberBox Grid.Row="13" Grid.Column="1" DoubleValue="{Binding FilterMaximumSquare}" DecimalPlaces="0" ></controls:NumberBox>
+
+                    </Grid>
+                    <Button Command="{Binding CalculatePriceCommand}">Calculate</Button>
+                    <TextBlock Text="PriceInput"/>
+                    <TextBox Text="{Binding PriceInput}" AcceptsTab="True" AcceptsReturn="True" Height="200" />
+
+
+                </StackPanel>
 
 
             </Grid>

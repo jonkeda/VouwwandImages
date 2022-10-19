@@ -11,6 +11,9 @@ public class ProfileEntity
     public virtual BrandEntity Brand { get; set; }
 
     [StringLength(100)]
+    public string? Code { get; set; }
+
+    [StringLength(100)]
     public string? Name { get; set; }
 
     public override string ToString()

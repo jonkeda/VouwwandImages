@@ -25,11 +25,13 @@ public sealed class VouwwandenDbContext : DbContext
     public DbSet<ProfileEntity> Profiles { get; set; }
     public DbSet<DistributionEntity> Distributions { get; set; }
 
-    public DbSet<GlassEntity> Glasses { get; set; }
+    public DbSet<GlassEntity> Glazing { get; set; }
+    public DbSet<ColorEntity> Colors { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder
+            .UseChangeTrackingProxies(false)
             .UseLazyLoadingProxies()
             .UseSqlite("Filename=./Vouwwanden.sqlite");
     }
