@@ -28,6 +28,7 @@ namespace VouwwandImages
             services.AddSingleton<DataViewModel>();
             services.AddSingleton<TranslatorViewModel>();
             services.AddSingleton<ImagesViewModel>();
+            services.AddSingleton<PdfViewModel>();
 
         }
 

@@ -17,6 +17,7 @@ public sealed class VouwwandenDbContext : DbContext
     #endregion
 
     public DbSet<MeasurementEntity> Measurements { get; set; }
+    public DbSet<CalculationEntity> Calculations { get; set; }
     public DbSet<SizeMeasurementEntity> SizeMeasurements { get; set; }
 
     public DbSet<ProductTypeEntity> ProductTypes { get; set; }

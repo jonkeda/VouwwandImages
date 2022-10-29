@@ -157,13 +157,13 @@ namespace VouwwandImages.UI.Controls
                 DependencyProperty.Register("ScientificDisplayType", typeof(ScientificDisplayType), typeof(NumberBox), new PropertyMetadata(ScientificDisplayType.ExpandOnExit));
 
         private static readonly DependencyProperty DecValueProperty =
-                DependencyProperty.Register("DecValue", typeof(decimal?), typeof(NumberBox), new PropertyMetadata(DecValueChangedCallback));
+                DependencyProperty.Register("DecValue", typeof(decimal?), typeof(NumberBox), new FrameworkPropertyMetadata(DecValueChangedCallback) { BindsTwoWayByDefault = true });
 
         private static readonly DependencyProperty DoubleValueProperty =
             DependencyProperty.Register("DoubleValue", typeof(double?), typeof(NumberBox), new FrameworkPropertyMetadata(double.MinValue, DoubleValueChangedCallback) { BindsTwoWayByDefault = true});
 
         private static readonly DependencyProperty NumValueProperty =
-                DependencyProperty.Register("NumValue", typeof(NumberValue?), typeof(NumberBox), new PropertyMetadata(NumValueChangedCallback));
+                DependencyProperty.Register("NumValue", typeof(NumberValue?), typeof(NumberBox), new FrameworkPropertyMetadata(NumValueChangedCallback) { BindsTwoWayByDefault = true });
 
         private static readonly DependencyProperty SignificantDigitsProperty =
                 DependencyProperty.Register("SignificantDigits", typeof(byte), typeof(NumberBox), new PropertyMetadata((byte)5));

@@ -17,9 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BitMiracle.Jpeg2000.Net" Version="2.2.1178" />
     <PackageReference Include="CefSharp.Wpf.NETCore" Version="106.0.260" />
     <PackageReference Include="GeneticSharp.Extensions" Version="3.1.2" />
     <PackageReference Include="Google.Cloud.Translation.V2" Version="3.1.0" />
+    <PackageReference Include="itext7" Version="7.2.4" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.10" />

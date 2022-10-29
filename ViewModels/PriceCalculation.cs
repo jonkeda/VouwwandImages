@@ -1,5 +1,4 @@
-﻿using Microsoft.ML;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -49,32 +48,23 @@ public class PriceCalculation : StoreDataViewModel
 {
     #region Properties
 
-    private string _bars = "1";
-    private int _barsCount;
-    private string _pillars = "1";
-    private int _pillarsCount;
-
-    public string Bars
+    public double CalculationSteps
     {
-        get { return _bars; }
+        get { return _calculationSteps; }
         set
         {
-            if (SetProperty(ref _bars, value))
+            if (SetProperty(ref _calculationSteps, value))
             {
-                _barsCount = int.Parse(_bars);
+                NotifyPropertyChanged(nameof(CalculationStepsPrice));
             }
         }
     }
 
-    public string Pillars
+    public double CalculationStepsPrice
     {
-        get { return _pillars; }
-        set
+        get
         {
-            if (SetProperty(ref _pillars, value))
-            {
-                _pillarsCount = int.Parse(_pillars);
-            }
+            return Math.Pow(2, CalculationSteps );
         }
     }
 
@@ -89,11 +79,7 @@ public class PriceCalculation : StoreDataViewModel
         get { return _maximumPrice; }
         set { SetProperty(ref _maximumPrice, value); }
     }
-
-
-
-
-
+    
     #endregion
 
     #region Calculate Prices
@@ -129,8 +115,8 @@ public class PriceCalculation : StoreDataViewModel
         StringBuilder sb = new StringBuilder();
         var prices = GetProductPrices();
 
-        int bars = _barsCount;
-        int pillars = _pillarsCount;
+        int bars = (int)Bars;
+        int pillars = (int)Pillars;
         double minPrice = MinimumPrice;
         double maxPrice = MaximumPrice;
         double stepPrice = maxPrice / 16;
@@ -196,7 +182,7 @@ public class PriceCalculation : StoreDataViewModel
         maxPrice /= magnify;
         // stepPrice /= magnify;
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < (CalculationSteps + 3); i++)
         {
             var minimum = calculatedPrices.First();
 
@@ -210,7 +196,7 @@ public class PriceCalculation : StoreDataViewModel
                 bars, pillars);
 
             sb.AppendLine();
-            sb.AppendLine((DateTime.Now - start).TotalMilliseconds.ToString());
+            sb.AppendLine($"time:{(DateTime.Now - start).TotalMilliseconds.ToString()}"  );
             start = DateTime.Now;
             foreach (var c in calculatedPrices)
             {
@@ -220,6 +206,9 @@ public class PriceCalculation : StoreDataViewModel
             stepPrice /= magnify;
 
         }
+
+        PriceOutput = RenderPriceOutput(prices);
+
 
         // sb.AppendLine($"{minimumWidthPrice:F0}\t{minimumHeightPrice:F0}\t{minimumSquarePrice:F0}\t{minimumBasePrice:F0}");
 
@@ -251,9 +240,24 @@ public class PriceCalculation : StoreDataViewModel
         */
 
         var mc = calculatedPrices.First();
+        CalculatedPriceWidth = mc.WidthPrice;
+        CalculatedPriceHeight = mc.HeightPrice;
+        CalculatedPriceSquare = mc.SquarePrice;
+        CalculatedPriceBase = mc.BasePrice;
         PriceOutcome =
             $"{mc.WidthPrice:F2}\t{mc.HeightPrice:F2}\t{mc.SquarePrice:F2}\t{mc.BasePrice:F2}\t{mc.PriceDifference:F2}\n"
             + sb;
+    }
+
+    private string RenderPriceOutput(ProductPriceCollection prices)
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (ProductPrice price in prices)
+        {
+            sb.AppendLine($"{price.WidthI}\t{price.HeightI}\t{price.Price:F2}\t{price.Difference:F1}");
+        }
+
+        return sb.ToString();
     }
 
     private string GetPriceResults(ProductPriceCollection prices, double lengthPrice, double plusPrice, double basePrice,
@@ -405,7 +409,7 @@ public class PriceCalculation : StoreDataViewModel
                                 + fullHeight * heightPrice
                                 + fullSquare * squarePrice
                                 + basePrice;
-
+                            p.Difference = p.Price - price;
                             totalPrice += Math.Abs(p.Price - price);
                         }
 
@@ -456,12 +460,19 @@ public class PriceCalculation : StoreDataViewModel
     private double _maximumOperations = 11;
     private double _minimumPrice = 0;
     private double _maximumPrice = 2048;
-
+    private double _calculationSteps = 11;
+    private string _priceOutput;
 
     public string PriceInput
     {
         get { return _priceInput; }
         set { SetProperty(ref _priceInput, value); }
+    }
+
+    public string PriceOutput
+    {
+        get { return _priceOutput; }
+        set { SetProperty(ref _priceOutput, value); }
     }
 
     public string PriceOutcome
@@ -559,15 +570,19 @@ public class PriceCalculation : StoreDataViewModel
             p => p.Width, p => p.Height, p => p.Price);
 
 
-        ByHeightDifference = CalculatePriceDifference("By height difference", prices.OrderBy(p => p.Width).ThenBy(p => p.Height),
+        ByHeightDifference = CalculatePriceDifference("By height difference",
+            prices.OrderBy(p => p.Width).ThenBy(p => p.Height),
             p => p.Height, p => p.Width);
-        ByWidthDifference = CalculatePriceDifference("By width difference", prices.OrderBy(p => p.Height).ThenBy(p => p.Width),
+        ByWidthDifference = CalculatePriceDifference("By width difference",
+            prices.OrderBy(p => p.Height).ThenBy(p => p.Width),
             p => p.Width, p => p.Height);
 
 
-        ByHeightPerMeter = CalculatePricePerMeter("By height per meter", prices.OrderBy(p => p.Width).ThenBy(p => p.Height),
+        ByHeightPerMeter = CalculatePricePerMeter("By height per meter",
+            prices.OrderBy(p => p.Width).ThenBy(p => p.Height),
             p => p.Height, p => p.Width);
-        ByWidthPerMeter = CalculatePricePerMeter("By width per meter", prices.OrderBy(p => p.Height).ThenBy(p => p.Width),
+        ByWidthPerMeter = CalculatePricePerMeter("By width per meter",
+            prices.OrderBy(p => p.Height).ThenBy(p => p.Width),
             p => p.Width, p => p.Height);
 
 
@@ -575,11 +590,15 @@ public class PriceCalculation : StoreDataViewModel
             p => p.Length, p => 0, p => p.Price);
 
         (ProductPrice? first, ProductPrice? last) = GetFirstLastProductPrice(prices);
+        if (first != null)
+        {
+            double startPrice = CalculateStartPrice(first, last);
 
-        double startPrice = CalculateStartPrice(first, last);
+            ByLengthPerMeter = GetDataPrice("By length per meter", prices.OrderBy(p => p.Length),
+                p => p.Length, p => 0, p => (p.Price - startPrice) / p.Length);
+        }
 
-        ByLengthPerMeter = GetDataPrice("By length per meter", prices.OrderBy(p => p.Length),
-            p => p.Length, p => 0, p => (p.Price - startPrice) / p.Length);
+
     }
 
     private double CalculateStartPrice(ProductPrice first, ProductPrice last)
@@ -699,73 +718,15 @@ public class PriceCalculation : StoreDataViewModel
     #endregion
 
 
-    #region ML.NET
-
-    public ICommand CreateAICommand
-    {
-        get { return new TargetCommand(CreateAI, true); }
-    }
-
-    private void CreateAI()
-    {
-        //Create ML Context with seed for repeteable/deterministic results
-        MLContext mlContext = new MLContext(seed: 0);
-
-        // STEP 1: Common data loading configuration
-        IDataView baseTrainingDataView = mlContext.Data.LoadFromEnumerable(GetProductPrices());
-        // mlContext.Data.LoadFromTextFile<ProductPrice>(TrainDataPath, hasHeader: true, separatorChar: ',');
-        // IDataView testDataView = mlContext.Data.LoadFromTextFile<ProductPrice>(TestDataPath, hasHeader: true, separatorChar: ',');
-
-
-
-        // Sample code of removing extreme data like "outliers" for FareAmounts higher than $150 and lower than $1 which can be error-data 
-        //var cnt = baseTrainingDataView.GetColumn<float>(nameof(ProductPrice.Price)).Count();
-        //IDataView trainingDataView = mlContext.Data.FilterRowsByColumn(baseTrainingDataView, nameof(ProductPrice.Price), lowerBound: 1, upperBound: 150);
-        //var cnt2 = trainingDataView.GetColumn<float>(nameof(ProductPrice.Price)).Count();
-
-        // STEP 2: Common data process configuration with pipeline data transformations
-        var dataProcessPipeline = mlContext.Transforms
-                                    .CopyColumns(outputColumnName: "Label", inputColumnName: nameof(ProductPrice.PriceF))
-                                    //.Append(mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "VendorIdEncoded", inputColumnName: nameof(TaxiTrip.VendorId)))
-                                    //.Append(mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "RateCodeEncoded", inputColumnName: nameof(TaxiTrip.RateCode)))
-                                    //.Append(mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "PaymentTypeEncoded", inputColumnName: nameof(TaxiTrip.PaymentType)))
-                                    .Append(mlContext.Transforms.NormalizeMeanVariance(outputColumnName: nameof(ProductPrice.HeightF)))
-                                    .Append(mlContext.Transforms.NormalizeMeanVariance(outputColumnName: nameof(ProductPrice.WidthF)))
-                                    //.Append(mlContext.Transforms.NormalizeMeanVariance(outputColumnName: nameof(TaxiTrip.TripDistance)))
-                                    .Append(mlContext.Transforms.Concatenate("Features",
-                                        nameof(ProductPrice.HeightF), nameof(ProductPrice.WidthF), nameof(ProductPrice.PriceF)))
-                                    ;
-
-
-        // STEP 3: Set the training algorithm, then create and config the modelBuilder - Selected Trainer (SDCA Regression algorithm)                            
-        var trainer = mlContext.Regression.Trainers.Sdca(labelColumnName: "Label", featureColumnName: "Features");
-        var trainingPipeline = dataProcessPipeline.Append(trainer);
-
-        // STEP 4: train
-        var trainedModel = trainingPipeline.Fit(baseTrainingDataView);
-
-
-        // mlContext.Model.Save(trainedModel, );
-
-        // STEP 5: Predict
-
-        var productSample = new ProductPrice(1.300d, 1.300d, 0);
-
-        // Create prediction engine related to the loaded trained model
-        var predEngine = mlContext.Model.CreatePredictionEngine<ProductPrice, ProductPricePrediction>(trainedModel);
-
-        //Score
-        var resultprediction = predEngine.Predict(productSample);
-    }
-
-    #endregion
-
     #region Function Builder
 
     public double MaximumOperations
     {
         get { return _maximumOperations; }
-        set { SetProperty(ref _maximumOperations, value); }
+        set
+        {
+            SetProperty(ref _maximumOperations, value);
+        }
     }
 
     public FunctionBuilderRunner? Builder

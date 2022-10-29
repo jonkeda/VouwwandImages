@@ -15,6 +15,7 @@ public class MainViewModel : ViewModel
 
         Translator = App.GetService<TranslatorViewModel>();
         Images = App.GetService<ImagesViewModel>();
+        Pdf = App.GetService<PdfViewModel>();
     }
 
     public TranslatorViewModel Translator { get; } 
@@ -22,5 +23,7 @@ public class MainViewModel : ViewModel
     public ImagesViewModel Images { get; }
 
     public WebViewModel Web { get; }
+
+    public PdfViewModel Pdf { get; }
 
 }

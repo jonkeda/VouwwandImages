@@ -18,15 +18,15 @@ namespace VouwwandImages.Exceptions
 
         public static void ShowMessageBox(Action action)
         {
-            action.Invoke();
-//            try
-//            {
-//                action.Invoke();
-//            }
-//            catch (Exception e)
-//                {
+            // action.Invoke();
+            try
+            {
+                action.Invoke();
+            }
+            catch (Exception e)
+                {
 //                ThreadDispatcher.Invoke(() =>  MessageBox.Show(e.Message));
-//            }
+            }
         }
 
         public static T Return<T>(Func<T> func)

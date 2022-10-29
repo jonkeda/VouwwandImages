@@ -154,6 +154,22 @@ namespace VouwwandImages.ViewModels
 
         #region Glazing
 
+        public string? FillingType
+        {
+            get { return _fillingType; }
+            set { SetProperty(ref _fillingType, value); }
+        }
+        public string? GlazingBeads
+        {
+            get { return _glazingBeads; }
+            set { SetProperty(ref _glazingBeads, value); }
+        }
+        public string? WarmEdgeSpace
+        {
+            get { return _warmEdgeSpace; }
+            set { SetProperty(ref _warmEdgeSpace, value); }
+        }
+
         public IEnumerable<GlassEntity> Glazing
         {
             get
@@ -304,6 +320,51 @@ namespace VouwwandImages.ViewModels
             set { SetProperty(ref _maximumHeight, value); }
         }
 
+
+        private decimal _bars = 1;
+        private decimal _pillars = 1;
+
+        public decimal Bars
+        {
+            get { return _bars; }
+            set { SetProperty(ref _bars, value); }
+        }
+
+        public decimal Pillars
+        {
+            get { return _pillars; }
+            set { SetProperty(ref _pillars, value); }
+        }
+
+
+        #endregion
+
+        #region Prices
+
+        public double CalculatedPriceWidth
+        {
+            get { return _calculatedPriceWidth; }
+            set { SetProperty(ref _calculatedPriceWidth, value); }
+        }
+
+        public double CalculatedPriceHeight
+        {
+            get { return _calculatedPriceHeight; }
+            set { SetProperty(ref _calculatedPriceHeight, value); }
+        }
+
+        public double CalculatedPriceSquare
+        {
+            get { return _calculatedPriceSquare; }
+            set { SetProperty(ref _calculatedPriceSquare, value); }
+        }
+
+        public double CalculatedPriceBase
+        {
+            get { return _calculatedPriceBase; }
+            set { SetProperty(ref _calculatedPriceBase, value); }
+        }
+
         #endregion
 
         #region Filter properties
@@ -318,7 +379,14 @@ namespace VouwwandImages.ViewModels
         private double _filterMaximumSquare = 100000000;
 
         private double _filterMinimumLength = 0;
-        private double _filterMaximumLength = 10000;
+        private double _filterMaximumLength = 100000;
+        private string? _fillingType;
+        private string? _glazingBeads;
+        private string? _warmEdgeSpace;
+        private double _calculatedPriceWidth;
+        private double _calculatedPriceHeight;
+        private double _calculatedPriceSquare;
+        private double _calculatedPriceBase;
 
         public double FilterMinimumWidth
         {
@@ -404,6 +472,16 @@ namespace VouwwandImages.ViewModels
                     MaximumHeight = MaximumHeight,
                     MinimumWidth = MinimumWidth,
                     MaximumWidth = MaximumWidth,
+                };
+
+                _dbContext.Measurements.Add(measurement);
+                _dbContext.SaveChanges();
+
+                // SizeMeasurementEntity
+
+                CalculationEntity calculation = new CalculationEntity
+                {
+                    Measurement = measurement,
 
                     FilterMinimumWidth = FilterMinimumWidth,
                     FilterMaximumWidth = FilterMaximumWidth,
@@ -415,11 +493,19 @@ namespace VouwwandImages.ViewModels
                     FilterMaximumSquare = FilterMaximumSquare,
 
                     FilterMinimumLength = FilterMinimumLength,
-                    FilterMaximumLength = FilterMaximumLength
+                    FilterMaximumLength = FilterMaximumLength,
+
+                    CalculatedPriceBase = CalculatedPriceBase,
+                    CalculatedPriceHeight = CalculatedPriceHeight,
+                    CalculatedPriceWidth = CalculatedPriceWidth
                 };
 
-                _dbContext.Measurements.Add(measurement);
-                _dbContext.SaveChanges();
+
+                calculation.CalculatedPriceBase = CalculatedPriceBase;
+
+                _dbContext.Calculations.Add(calculation);                
+
+
 
                 Refresh();
             }

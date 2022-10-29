@@ -14,22 +14,27 @@
     <TabControl Grid.Column="0" TabIndex="1">
         <TabItem Header="Translation" DataContext="{Binding Translator}">
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="184*"/>
+                    <ColumnDefinition Width="61*"/>
+                    <ColumnDefinition Width="549*"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,0,18" Grid.RowSpan="2">
                     <Button Command="{Binding EncodeCommand}">Encode</Button>
                     <Button Command="{Binding TranslateCommand}">Translate</Button>
                     <Button Command="{Binding ExportCommand}">Export</Button>
                 </StackPanel>
 
-                <TextBox Grid.Row="1" Text="{Binding Title}" />
+                <TextBox Grid.Row="1" Text="{Binding Title}" Grid.ColumnSpan="3" Margin="0,0,0,368" Grid.RowSpan="2" />
 
                 <TextBox Grid.Row="2" Text="{Binding Text}" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" 
-                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="3" />
 
             </Grid>
         </TabItem>
@@ -76,27 +81,27 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Width Min"/>
-                        <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding MinimumWidth}" ></TextBox>
+                        <controls:NumberBox Grid.Row="1" Grid.Column="0" DecValue="{Binding ScrapeMinimumWidth}" DecimalPlaces="0" ></controls:NumberBox>
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="Max"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MaximumWidth}" ></TextBox>
+                        <controls:NumberBox Grid.Row="1" Grid.Column="1" DecValue="{Binding ScrapeMaximumWidth}" DecimalPlaces="0" ></controls:NumberBox>
                         <TextBlock Grid.Row="0" Grid.Column="2" Text="Step"/>
-                        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding StepWidth}" ></TextBox>
+                        <controls:NumberBox Grid.Row="1" Grid.Column="2" DecValue="{Binding StepWidth}" DecimalPlaces="0" ></controls:NumberBox>
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Width Min"/>
-                        <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding MinimumHeight}" ></TextBox>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Height Min"/>
+                        <controls:NumberBox Grid.Row="3" Grid.Column="0" DecValue="{Binding ScrapeMinimumHeight}" DecimalPlaces="0" ></controls:NumberBox>
                         <TextBlock Grid.Row="2" Grid.Column="1" Text="Max"/>
-                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MaximumHeight}" ></TextBox>
+                        <controls:NumberBox Grid.Row="3" Grid.Column="1" DecValue="{Binding ScrapeMaximumHeight}" DecimalPlaces="0" ></controls:NumberBox>
                         <TextBlock Grid.Row="2" Grid.Column="2" Text="Step"/>
-                        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding StepHeight}" ></TextBox>
+                        <controls:NumberBox Grid.Row="3" Grid.Column="2" DecValue="{Binding StepHeight}" DecimalPlaces="0" ></controls:NumberBox>
 
                     </Grid>
 
                     <TextBlock Text="Bars"/>
-                    <TextBox Text="{Binding Bars}" ></TextBox>
+                    <controls:NumberBox DecValue="{Binding Bars}" DecimalPlaces="0" />
                     <TextBlock Text="Pillars"/>
-                    <TextBox Text="{Binding Pillars}" ></TextBox>
+                    <controls:NumberBox DecValue="{Binding Pillars}" DecimalPlaces="0" />
 
-                    <Button Command="{Binding CalculateCommand}">Scrape prices</Button>
+                    <Button Command="{Binding ScrapePriceCommand}">Scrape prices</Button>
                     <TextBox Text="{Binding PriceInput}" AcceptsTab="True" AcceptsReturn="True" Height="200"
                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
 
@@ -134,6 +139,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -146,48 +153,61 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Calculations Steps"/>
+                        <controls:NumberBox Grid.Row="1" Grid.Column="0" DoubleValue="{Binding CalculationSteps}" DecimalPlaces="0"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CalculationStepsPrice, Mode=OneWay}" HorizontalAlignment="Left"></TextBox>
 
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Minimum"/>
-                        <controls:NumberBox Grid.Row="1" Grid.Column="0" DoubleValue="{Binding MinimumPrice}" DecimalPlaces="0" ></controls:NumberBox>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Maximum Price"/>
-                        <controls:NumberBox Grid.Row="1" Grid.Column="1" DoubleValue="{Binding MaximumPrice}" DecimalPlaces="0" ></controls:NumberBox>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Minimum"/>
+                        <controls:NumberBox Grid.Row="3" Grid.Column="0" DoubleValue="{Binding MinimumPrice}" DecimalPlaces="0" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="Maximum Price"/>
+                        <controls:NumberBox Grid.Row="3" Grid.Column="1" DoubleValue="{Binding MaximumPrice}" DecimalPlaces="0" />
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Filter"/>
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Width Minimum"/>
-                        <controls:NumberBox Grid.Row="4" Grid.Column="0" DoubleValue="{Binding FilterMinimumWidth}" DecimalPlaces="0" />
-                        <TextBlock Grid.Row="3" Grid.Column="1" Text="Maximum"/>
-                        <controls:NumberBox Grid.Row="4" Grid.Column="1" DoubleValue="{Binding FilterMaximumWidth}" DecimalPlaces="0" />
-
-                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Height Minimum"/>
-                        <controls:NumberBox Grid.Row="6" Grid.Column="0" DoubleValue="{Binding FilterMinimumHeight}" DecimalPlaces="0" ></controls:NumberBox>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="Filter"/>
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Width Minimum"/>
+                        <controls:NumberBox Grid.Row="6" Grid.Column="0" DoubleValue="{Binding FilterMinimumWidth}" DecimalPlaces="0" />
                         <TextBlock Grid.Row="5" Grid.Column="1" Text="Maximum"/>
-                        <controls:NumberBox Grid.Row="6" Grid.Column="1" DoubleValue="{Binding FilterMaximumHeight}" DecimalPlaces="0" ></controls:NumberBox>
+                        <controls:NumberBox Grid.Row="6" Grid.Column="1" DoubleValue="{Binding FilterMaximumWidth}" DecimalPlaces="0" />
 
-                        <TextBlock Grid.Row="7" Grid.Column="0" Text="Length Minimum"/>
-                        <controls:NumberBox Grid.Row="8" Grid.Column="0" DoubleValue="{Binding FilterMinimumLength}" DecimalPlaces="0" ></controls:NumberBox>
+                        <TextBlock Grid.Row="7" Grid.Column="0" Text="Height Minimum"/>
+                        <controls:NumberBox Grid.Row="8" Grid.Column="0" DoubleValue="{Binding FilterMinimumHeight}" DecimalPlaces="0" />
                         <TextBlock Grid.Row="7" Grid.Column="1" Text="Maximum"/>
-                        <controls:NumberBox Grid.Row="8" Grid.Column="1" DoubleValue="{Binding FilterMaximumLength}" DecimalPlaces="0" ></controls:NumberBox>
+                        <controls:NumberBox Grid.Row="8" Grid.Column="1" DoubleValue="{Binding FilterMaximumHeight}" DecimalPlaces="0" />
 
-                        <TextBlock Grid.Row="9" Grid.Column="0" Text="Square Minimum"/>
-                        <controls:NumberBox Grid.Row="10" Grid.Column="0" DoubleValue="{Binding FilterMinimumSquare}" DecimalPlaces="0" ></controls:NumberBox>
+                        <TextBlock Grid.Row="9" Grid.Column="0" Text="Length Minimum"/>
+                        <controls:NumberBox Grid.Row="10" Grid.Column="0" DoubleValue="{Binding FilterMinimumLength}" DecimalPlaces="0" />
                         <TextBlock Grid.Row="9" Grid.Column="1" Text="Maximum"/>
-                        <controls:NumberBox Grid.Row="10" Grid.Column="1" DoubleValue="{Binding FilterMaximumSquare}" DecimalPlaces="0" ></controls:NumberBox>
+                        <controls:NumberBox Grid.Row="10" Grid.Column="1" DoubleValue="{Binding FilterMaximumLength}" DecimalPlaces="0" />
+
+                        <TextBlock Grid.Row="11" Grid.Column="0" Text="Square Minimum"/>
+                        <controls:NumberBox Grid.Row="12" Grid.Column="0" DoubleValue="{Binding FilterMinimumSquare}" DecimalPlaces="0" />
+                        <TextBlock Grid.Row="11" Grid.Column="1" Text="Maximum"/>
+                        <controls:NumberBox Grid.Row="12" Grid.Column="1" DoubleValue="{Binding FilterMaximumSquare}" DecimalPlaces="0" />
 
                     </Grid>
-                    <TextBlock Text="PriceInput"/>
-                    <TextBox Text="{Binding PriceInput}" AcceptsTab="True" AcceptsReturn="True" Height="200" ></TextBox>
+                    <TabControl>
+                        <TabItem Header="Price input">
+                            <TextBox Text="{Binding PriceInput}" AcceptsTab="True" AcceptsReturn="True" Height="200" 
+                                     VerticalScrollBarVisibility="Auto"></TextBox>
+                        </TabItem>
+                        <TabItem Header="Price output">
+                            <TextBox Text="{Binding PriceOutput}" AcceptsTab="True" AcceptsReturn="True" Height="200" 
+                                     VerticalScrollBarVisibility="Auto"></TextBox>
+                        </TabItem>
+                    </TabControl>
 
                     <Button Command="{Binding CalculatePriceCommand}">Calculate</Button>
-                    <TextBox Text="{Binding PriceOutcome}" AcceptsTab="True" AcceptsReturn="True" Height="200"/>
+                    <TextBox Text="{Binding PriceOutcome}" AcceptsTab="True" AcceptsReturn="True" Height="200" 
+                             VerticalScrollBarVisibility="Auto"/>
                     <Button Command="{Binding CreateGraphCommand}">Create graph</Button>
 
-                    <Button Command="{Binding CreateAICommand}">Create AI</Button>
                     <Button Command="{Binding CreateFunctionBuilderCommand}">Start Function</Button>
-                    <TextBlock Text="Maximum Operation"/>
-                    <controls:NumberBox DoubleValue="{Binding MaximumOperations}" DecimalPlaces="0"/>
-                    <TextBox Text="{Binding Builder.Outcome}" AcceptsTab="True" AcceptsReturn="True" Height="300" TextWrapping="Wrap"/>
                     <Button Command="{Binding StopFunctionBuilderCommand}">Stop Function</Button>
                     <Button Command="{Binding ResumeFunctionBuilderCommand}">Resume Function</Button>
+                    <TextBlock Text="Function Operations"/>
+                    <controls:NumberBox DoubleValue="{Binding MaximumOperations}" DecimalPlaces="0"/>
+
+                    <TextBox Text="{Binding Builder.Outcome}" AcceptsTab="True" AcceptsReturn="True" Height="300" TextWrapping="Wrap" 
+                             VerticalScrollBarVisibility="Auto"/>
 
                 </StackPanel>
                 <Grid Grid.Row="1" Grid.Column="1">
@@ -255,11 +275,20 @@
                     <ComboBox ItemsSource="{Binding Distributions}"
                               SelectedItem="{Binding SelectedDistribution}" Width="200"/>
 
+                    <TextBlock Text="Filling Type" />
+                    <TextBox Text="{Binding FillingType}" />
+
                     <TextBlock Text="Glass" />
                     <TextBox Text="{Binding NewGlassCode}" />
                     <TextBox Text="{Binding NewGlassName}" />
                     <ComboBox ItemsSource="{Binding Glazing}"
                               SelectedItem="{Binding SelectedGlass}" Width="200"/>
+
+                    <TextBlock Text="Glazing Beads" />
+                    <TextBox Text="{Binding GlazingBeads}" />
+
+                    <TextBlock Text="Warm Edge Space" />
+                    <TextBox Text="{Binding WarmEdgeSpace}" />
 
                     <TextBlock Text="Color Ral Inside" />
                     <TextBox Text="{Binding NewRalInsideCode}" />
@@ -308,6 +337,8 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Sizes"/>
@@ -321,35 +352,69 @@
                         <TextBlock Grid.Row="3" Grid.Column="1" Text="Maximum"/>
                         <controls:NumberBox Grid.Row="4" Grid.Column="1" DoubleValue="{Binding MaximumHeight}" DecimalPlaces="0" />
 
-                        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="Filter"/>
-                        <TextBlock Grid.Row="6" Grid.Column="0" Text="Width Minimum"/>
-                        <controls:NumberBox Grid.Row="7" Grid.Column="0" DoubleValue="{Binding FilterMinimumWidth}" DecimalPlaces="0" />
-                        <TextBlock Grid.Row="6" Grid.Column="1" Text="Maximum"/>
-                        <controls:NumberBox Grid.Row="7" Grid.Column="1" DoubleValue="{Binding FilterMaximumWidth}" DecimalPlaces="0" />
 
-                        <TextBlock Grid.Row="8" Grid.Column="0" Text="Height Minimum"/>
-                        <controls:NumberBox Grid.Row="9" Grid.Column="0" DoubleValue="{Binding FilterMinimumHeight}" DecimalPlaces="0" ></controls:NumberBox>
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Bars"/>
+                        <controls:NumberBox Grid.Row="6" Grid.Column="0" DecValue="{Binding Bars}" DecimalPlaces="0" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" Text="Pillars"/>
+                        <controls:NumberBox Grid.Row="6" Grid.Column="1" DecValue="{Binding Pillars}" DecimalPlaces="0" />
+
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="Filter"/>
+                        <TextBlock Grid.Row="8" Grid.Column="0" Text="Width Minimum"/>
+                        <controls:NumberBox Grid.Row="9" Grid.Column="0" DoubleValue="{Binding FilterMinimumWidth}" DecimalPlaces="0" />
                         <TextBlock Grid.Row="8" Grid.Column="1" Text="Maximum"/>
-                        <controls:NumberBox Grid.Row="9" Grid.Column="1" DoubleValue="{Binding FilterMaximumHeight}" DecimalPlaces="0" ></controls:NumberBox>
+                        <controls:NumberBox Grid.Row="9" Grid.Column="1" DoubleValue="{Binding FilterMaximumWidth}" DecimalPlaces="0" />
 
-                        <TextBlock Grid.Row="10" Grid.Column="0" Text="Length Minimum"/>
-                        <controls:NumberBox Grid.Row="11" Grid.Column="0" DoubleValue="{Binding FilterMinimumLength}" DecimalPlaces="0" ></controls:NumberBox>
+                        <TextBlock Grid.Row="10" Grid.Column="0" Text="Height Minimum"/>
+                        <controls:NumberBox Grid.Row="11" Grid.Column="0" DoubleValue="{Binding FilterMinimumHeight}" DecimalPlaces="0" />
                         <TextBlock Grid.Row="10" Grid.Column="1" Text="Maximum"/>
-                        <controls:NumberBox Grid.Row="11" Grid.Column="1" DoubleValue="{Binding FilterMaximumLength}" DecimalPlaces="0" ></controls:NumberBox>
+                        <controls:NumberBox Grid.Row="11" Grid.Column="1" DoubleValue="{Binding FilterMaximumHeight}" DecimalPlaces="0" />
 
-                        <TextBlock Grid.Row="12" Grid.Column="0" Text="Square Minimum"/>
-                        <controls:NumberBox Grid.Row="13" Grid.Column="0" DoubleValue="{Binding FilterMinimumSquare}" DecimalPlaces="0" ></controls:NumberBox>
+                        <TextBlock Grid.Row="12" Grid.Column="0" Text="Length Minimum"/>
+                        <controls:NumberBox Grid.Row="13" Grid.Column="0" DoubleValue="{Binding FilterMinimumLength}" DecimalPlaces="0" />
                         <TextBlock Grid.Row="12" Grid.Column="1" Text="Maximum"/>
-                        <controls:NumberBox Grid.Row="13" Grid.Column="1" DoubleValue="{Binding FilterMaximumSquare}" DecimalPlaces="0" ></controls:NumberBox>
+                        <controls:NumberBox Grid.Row="13" Grid.Column="1" DoubleValue="{Binding FilterMaximumLength}" DecimalPlaces="0" />
+
+                        <TextBlock Grid.Row="14" Grid.Column="0" Text="Square Minimum"/>
+                        <controls:NumberBox Grid.Row="15" Grid.Column="0" DoubleValue="{Binding FilterMinimumSquare}" DecimalPlaces="0" />
+                        <TextBlock Grid.Row="14" Grid.Column="1" Text="Maximum"/>
+                        <controls:NumberBox Grid.Row="15" Grid.Column="1" DoubleValue="{Binding FilterMaximumSquare}" DecimalPlaces="0" />
+
+                    </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Row="0" Grid.Column="0" Text="Width" />
+                        <controls:NumberBox Grid.Row="1" Grid.Column="0" 
+                                            DoubleValue="{Binding CalculatedPriceWidth}" DecimalPlaces="0" />
+
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="Height" />
+                        <controls:NumberBox Grid.Row="1" Grid.Column="0" 
+                                            DoubleValue="{Binding CalculatedPriceHeight}" DecimalPlaces="0" />
+
+                        <TextBox Grid.Row="0" Grid.Column="2" Text="Square" />
+                        <controls:NumberBox Grid.Row="1" Grid.Column="0" 
+                                            DoubleValue="{Binding CalculatedPriceSquare}" DecimalPlaces="0" />
+
+                        <TextBox Grid.Row="0" Grid.Column="3" Text="Base" />
+                        <controls:NumberBox Grid.Row="1" Grid.Column="0" 
+                                            DoubleValue="{Binding CalculatedPriceBase}" DecimalPlaces="0" />
 
                     </Grid>
                     <Button Command="{Binding CalculatePriceCommand}">Calculate</Button>
+
                     <TextBlock Text="PriceInput"/>
                     <TextBox Text="{Binding PriceInput}" AcceptsTab="True" AcceptsReturn="True" Height="200" />
 
-
                 </StackPanel>
-
 
             </Grid>
         </TabItem>
@@ -382,6 +447,18 @@
 
         <TabItem Header="Data">
             <uc:Data />
+        </TabItem>
+        <TabItem Header="Pdf" DataContext="{Binding Pdf}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Export" Command="{Binding ExportImagesCommand}"></Button>
+                </StackPanel>
+            </Grid>
         </TabItem>
     </TabControl>
 </Window>

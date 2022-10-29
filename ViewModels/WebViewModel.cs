@@ -64,16 +64,16 @@ namespace VouwwandImages.ViewModels
 
             StringBuilder sb = new StringBuilder();
 
-            int maxHeight = int.Parse(MaximumHeight);
-            int minHeight = int.Parse(MinimumHeight);
-            int stepHeight = int.Parse(StepHeight);
-            int maxWidth = int.Parse(MaximumWidth);
-            int minWidth = int.Parse(MinimumWidth);
-            int stepWidth = int.Parse(StepWidth);
+            decimal maxHeight = ScrapeMaximumHeight;
+            decimal minHeight = ScrapeMinimumHeight;
+            decimal stepHeight = StepHeight;
+            decimal maxWidth = ScrapeMaximumWidth;
+            decimal minWidth = ScrapeMinimumWidth;
+            decimal stepWidth = StepWidth;
 
-            for (int width = minWidth; width <= maxWidth; width += stepWidth)
+            for (decimal width = minWidth; width <= maxWidth; width += stepWidth)
             {
-                for (int height = minHeight; height <= maxHeight; height += stepHeight)
+                for (decimal height = minHeight; height <= maxHeight; height += stepHeight)
                 {
                     await ScrapePrice(sb, width, height);
                     if (_stop)
@@ -86,7 +86,7 @@ namespace VouwwandImages.ViewModels
             PriceInput = sb.ToString();
         }
 
-        private async Task ScrapePrice(StringBuilder sb, int width, int height)
+        private async Task ScrapePrice(StringBuilder sb, decimal width, decimal height)
         {
             var page = new DimensionPage(Context);
 
@@ -112,59 +112,58 @@ namespace VouwwandImages.ViewModels
 
         #region Stepping
 
-        private string _minimumWidth;
-        private string _maximumWidth;
-        private string _stepWidth;
+        private decimal _scrapeMinimumWidth;
+        private decimal _scrapeMaximumWidth;
+        private decimal _stepWidth;
 
-        private string _minimumHeight;
-        private string _maximumHeight;
-        private string _stepHeight;
+        private decimal _scrapeMinimumHeight;
+        private decimal _scrapeMaximumHeight;
+        private decimal _stepHeight;
 
-       
         private volatile bool _stop;
 
-        public string MinimumWidth
+        public decimal ScrapeMinimumWidth
         {
-            get { return _minimumWidth; }
-            set { SetProperty(ref _minimumWidth, value); }
+            get { return _scrapeMinimumWidth; }
+            set { SetProperty(ref _scrapeMinimumWidth, value); }
         }
 
-        public string MaximumWidth
+        public decimal ScrapeMaximumWidth
         {
-            get { return _maximumWidth; }
-            set { SetProperty(ref _maximumWidth, value); }
+            get { return _scrapeMaximumWidth; }
+            set { SetProperty(ref _scrapeMaximumWidth, value); }
         }
 
-        public string StepWidth
+        public decimal StepWidth
         {
             get { return _stepWidth; }
             set { SetProperty(ref _stepWidth, value); }
         }
 
-        public string MinimumHeight
+        public decimal ScrapeMinimumHeight
         {
-            get { return _minimumHeight; }
-            set { SetProperty(ref _minimumHeight, value); }
+            get { return _scrapeMinimumHeight; }
+            set { SetProperty(ref _scrapeMinimumHeight, value); }
         }
 
-        public string MaximumHeight
+        public decimal ScrapeMaximumHeight
         {
-            get { return _maximumHeight; }
-            set { SetProperty(ref _maximumHeight, value); }
+            get { return _scrapeMaximumHeight; }
+            set { SetProperty(ref _scrapeMaximumHeight, value); }
         }
 
-        public string StepHeight
+        public decimal StepHeight
         {
             get { return _stepHeight; }
             set { SetProperty(ref _stepHeight, value); }
         }
 
-        public ICommand CalculateCommand
+        public ICommand ScrapePriceCommand
         {
-            get { return new TargetCommand(Calculate); }
+            get { return new TargetCommand(ScrapePrice); }
         }
 
-        private async void Calculate()
+        private async void ScrapePrice()
         {
             await ScrapePrices();
             CalculatePrices();
@@ -177,13 +176,13 @@ namespace VouwwandImages.ViewModels
 
         private async void FastDefaults()
         {
-            MinimumWidth = "1000";
-            MaximumWidth = "3000";
-            StepWidth = "1000";
+            ScrapeMinimumWidth = 1000;
+            ScrapeMaximumWidth = 3000;
+            StepWidth = 1000;
 
-            MinimumHeight = "500";
-            MaximumHeight = "2500";
-            StepHeight = "1000";
+            ScrapeMinimumHeight = 500;
+            ScrapeMaximumHeight = 2500;
+            StepHeight = 1000;
 
         }
 
@@ -194,16 +193,16 @@ namespace VouwwandImages.ViewModels
 
         private async void StandardDefaults()
         {
-            MinimumWidth = "1000";
-            MaximumWidth = "3500";
-            StepWidth = "500";
+            ScrapeMinimumWidth = 1000;
+            ScrapeMaximumWidth = 3500;
+            StepWidth = 500;
 
-            MinimumHeight = "1000";
-            MaximumHeight = "2500";
-            StepHeight = "500";
+            ScrapeMinimumHeight = 1000;
+            ScrapeMaximumHeight = 2500;
+            StepHeight = 500;
 
-            Bars = "2";
-            Pillars = "2";
+            Bars = 2;
+            Pillars = 2;
 
         }
 
@@ -215,7 +214,6 @@ namespace VouwwandImages.ViewModels
         public bool CalculateMatrix { get; set; }
 
         public bool CalculateOutlines { get; set; }
-        
 
         private void Stop()
         {

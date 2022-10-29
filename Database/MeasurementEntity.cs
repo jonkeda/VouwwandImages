@@ -41,6 +41,10 @@ public class MeasurementEntity : ISize
 
     public double MaximumHeight { get; set; }
 
+    // 
+    public int Bars { get; set; }
+
+    public int Pillars { get; set; }
 
     // Glass
     [StringLength(100)]
@@ -73,16 +77,4 @@ public class MeasurementEntity : ISize
     public int? RalSashOutsideId { get; set; }
     [ForeignKey(nameof(RalSashOutsideId))]
     public virtual ColorEntity? RalSashOutside { get; set; }
-
-
-    // Filters
-    public double FilterMinimumWidth { get; set; }
-    public double FilterMaximumWidth { get; set; }
-    public double FilterMinimumHeight { get; set; }
-    public double FilterMaximumHeight { get; set; }
-
-    public double FilterMinimumSquare { get; set; }
-    public double FilterMaximumSquare { get; set; }
-    public double FilterMinimumLength { get; set; }
-    public double FilterMaximumLength { get; set; }
 }

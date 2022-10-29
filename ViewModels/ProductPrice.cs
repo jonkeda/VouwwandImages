@@ -90,5 +90,10 @@
             }
         }
 
+        public double Difference
+        {
+            get;
+            set;
+        }
     }
 }
