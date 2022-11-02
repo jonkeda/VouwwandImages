@@ -84,7 +84,7 @@ public class PriceCalculation : StoreDataViewModel
 
     #region Calculate Prices
 
-    private ProductPriceCollection GetProductPrices()
+    protected override ProductPriceCollection GetProductPrices()
     {
         var priceText = PriceInput;
 

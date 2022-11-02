@@ -35,5 +35,9 @@ public enum Brand
     EkoOkna = 9,
 
     [Display(Name = "Forster")]
-    Forster = 10
+    Forster = 10,
+
+    [Display(Name = "Cortizo")]
+    Cortizo = 11,
+
 }

@@ -42,9 +42,9 @@ public class MeasurementEntity : ISize
     public double MaximumHeight { get; set; }
 
     // 
-    public int Bars { get; set; }
+    public decimal Bars { get; set; }
 
-    public int Pillars { get; set; }
+    public decimal Pillars { get; set; }
 
     // Glass
     [StringLength(100)]
@@ -62,19 +62,46 @@ public class MeasurementEntity : ISize
 
 
     // Colors
-    public int? RalInsideId { get; set; }
-    [ForeignKey(nameof(RalInsideId))]
-    public virtual ColorEntity? RalInside { get; set; }
 
-    public int? RalOutsideId { get; set; }
-    [ForeignKey(nameof(RalOutsideId))]
-    public virtual ColorEntity? RalOutside { get; set; }
+    public int? RalColourId { get; set; }
+    [ForeignKey(nameof(RalColourId))]
+    public virtual ColorEntity? RalColour { get; set; }
 
-    public int? RalSashInsideId { get; set; }
-    [ForeignKey(nameof(RalSashInsideId))]
-    public virtual ColorEntity? RalSashInside { get; set; }
+    public int? RalSashColourId { get; set; }
+    [ForeignKey(nameof(RalSashColourId))]
+    public virtual ColorEntity? RalSashColour { get; set; }
+
+    public int? RalInnerFrameId { get; set; }
+    [ForeignKey(nameof(RalInnerFrameId))]
+    public virtual ColorEntity? RalInnerFrame { get; set; }
+
+    public int? RalOuterFrameId { get; set; }
+    [ForeignKey(nameof(RalOuterFrameId))]
+    public virtual ColorEntity? RalOuterFrame { get; set; }
+
+    public int? RalInnerSashId { get; set; }
+    [ForeignKey(nameof(RalInnerSashId))]
+    public virtual ColorEntity? RalInnerSash { get; set; }
     
-    public int? RalSashOutsideId { get; set; }
-    [ForeignKey(nameof(RalSashOutsideId))]
-    public virtual ColorEntity? RalSashOutside { get; set; }
+    public int? RalOuterSashId { get; set; }
+    [ForeignKey(nameof(RalOuterSashId))]
+    public virtual ColorEntity? RalOuterSash { get; set; }
+
+
+    public int? RalInnerFittingId { get; set; }
+    [ForeignKey(nameof(RalInnerFittingId))]
+    public virtual ColorEntity? RalInnerFitting { get; set; }
+
+    public int? RalOuterFittingId { get; set; }
+    [ForeignKey(nameof(RalOuterFittingId))]
+    public virtual ColorEntity? RalOuterFitting { get; set; }
+
+    public int? RalInnerPeripheralId { get; set; }
+    [ForeignKey(nameof(RalInnerPeripheralId))]
+    public virtual ColorEntity? RalInnerPeripheral { get; set; }
+
+    public int? RalOuterPeripheralId { get; set; }
+    [ForeignKey(nameof(RalOuterPeripheralId))]
+    public virtual ColorEntity? RalOuterPeripheral { get; set; }
+
 }

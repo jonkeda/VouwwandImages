@@ -253,7 +253,8 @@
 
                 <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Orientation="Horizontal">
                     <Button Command="{Binding RefreshCommand}">Refresh</Button>
-                    <Button Command="{Binding SaveMeasurementCommand}">Save</Button>
+                    <Button Command="{Binding SaveMeasurementCommand}">Save Measurement</Button>
+                    <Button Command="{Binding SaveCalculationCommand}">Save Calculation</Button>
                 </StackPanel>
 
                 <StackPanel Grid.Column="0" Grid.Row="1">
@@ -290,29 +291,42 @@
                     <TextBlock Text="Warm Edge Space" />
                     <TextBox Text="{Binding WarmEdgeSpace}" />
 
-                    <TextBlock Text="Color Ral Inside" />
-                    <TextBox Text="{Binding NewRalInsideCode}" />
-                    <TextBox Text="{Binding NewRalInsideName}" />
+                    <TextBlock Text="Color" />
+                    <TextBox Text="{Binding NewColourCode}" />
+                    <TextBox Text="{Binding NewColourName}" />
                     <ComboBox ItemsSource="{Binding Colors}"
-                              SelectedItem="{Binding SelectedRalInside}" Width="200"/>
+                              SelectedItem="{Binding SelectedColour}" Width="200"/>
 
-                    <TextBlock Text="Color Ral Outside" />
-                    <TextBox Text="{Binding NewRalOutsideCode}" />
-                    <TextBox Text="{Binding NewRalOutsideName}" />
+                    <TextBlock Text="Sash Color" />
+                    <TextBox Text="{Binding NewSashColourCode}" />
+                    <TextBox Text="{Binding NewSashColourName}" />
                     <ComboBox ItemsSource="{Binding Colors}"
-                              SelectedItem="{Binding SelectedRalOutside}" Width="200"/>
+                              SelectedItem="{Binding SelectedSashColour}" Width="200"/>
+
+
+                    <TextBlock Text="Color Ral Frame Inside" />
+                    <TextBox Text="{Binding NewRalInnerFrameCode}" />
+                    <TextBox Text="{Binding NewRalInnerFrameName}" />
+                    <ComboBox ItemsSource="{Binding Colors}"
+                              SelectedItem="{Binding SelectedRalInnerFrame}" Width="200"/>
+
+                    <TextBlock Text="Color Ral Frame Outside" />
+                    <TextBox Text="{Binding NewRalOuterFrameCode}" />
+                    <TextBox Text="{Binding NewRalOuterFrameName}" />
+                    <ComboBox ItemsSource="{Binding Colors}"
+                              SelectedItem="{Binding SelectedRalOuterFrame}" Width="200"/>
 
                     <TextBlock Text="Color Ral Sash Inside" />
-                    <TextBox Text="{Binding NewRalSashInsideCode}" />
-                    <TextBox Text="{Binding NewRalSashInsideName}" />
+                    <TextBox Text="{Binding NewRalInnerSashCode}" />
+                    <TextBox Text="{Binding NewRalInnerSashName}" />
                     <ComboBox ItemsSource="{Binding Colors}"
-                              SelectedItem="{Binding SelectedRalSashInside}" Width="200"/>
+                              SelectedItem="{Binding SelectedRalInnerSash}" Width="200"/>
 
                     <TextBlock Text="Color Ral Sash Outside" />
-                    <TextBox Text="{Binding NewRalSashOutsideCode}" />
-                    <TextBox Text="{Binding NewRalSashOutsideName}" />
+                    <TextBox Text="{Binding NewRalOuterSashCode}" />
+                    <TextBox Text="{Binding NewRalOuterSashName}" />
                     <ComboBox ItemsSource="{Binding Colors}"
-                              SelectedItem="{Binding SelectedRalSashOutside}" Width="200"/>
+                              SelectedItem="{Binding SelectedRalOuterSash}" Width="200"/>
 
                 </StackPanel>
 

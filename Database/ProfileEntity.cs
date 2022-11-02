@@ -13,6 +13,8 @@ public class ProfileEntity
     [StringLength(100)]
     public string? Code { get; set; }
 
+    public Profile Profile { get; set; }
+    
     [StringLength(100)]
     public string? Name { get; set; }
 

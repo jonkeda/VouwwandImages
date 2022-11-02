@@ -8,17 +8,23 @@ public class GlassPage : Page
     {
         GlassTab = new Control(Context, new ByHref("#menu_sash_0-3"));
         Glazing = new Control(Context, new ByTagAttribute("div", "data-configurator-target", "[CONFIGS][CONFIG][0][GLAZING]"));
+        GlazingBeads = new Control(Context, new ByTagAttribute("div", "data-configurator-target", "[CONFIGS][CONFIG][0][GLAZING_BEADS]"));
         NoGlass = new Control(Context, new ByTagAttribute("label", "for", "BEZ_SZYBY"));
+        WarmEdge = new Control(Context, new ByTagAttribute("div", "data-configurator-target", "[CONFIGS][CONFIG][0][WARMEDGE]"));
         Filter = new Control(context, new ByClass("glass-filter-button"));
         NoGlass48Mm = new Control(Context, new ByTagAttribute("div", "data-value", "00/BEZ_SZYBY_48"));
         GlassWeight = new Control(Context, new ById("WORKSHOP[CONFIGS][CONFIG][0][GLAZING_OPTION][0][PSZ_waga_bsz]"));
         Apply = new Control(Context, new ById("sendConfiguratorModificationButton"));
     }
+    public Control GlassTab { get; }
 
     public Control Apply { get; set; }
 
-    public Control GlassTab { get; }
     public Control Glazing { get; }
+
+    public Control GlazingBeads { get; }
+
+    public Control WarmEdge { get; }
 
     public Control Filter { get; }
 

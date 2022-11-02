@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using VouwwandImages.Attributes;
 using VouwwandImages.Extensions;
 
 namespace VouwwandImages.Database;
@@ -12,7 +13,7 @@ public sealed class VouwwandenDbContext : DbContext
     {
         Database.EnsureDeleted();
         Database.EnsureCreated();
-            
+
     }
     #endregion
 
@@ -37,11 +38,12 @@ public sealed class VouwwandenDbContext : DbContext
             .UseSqlite("Filename=./Vouwwanden.sqlite");
     }
 
-    #region Overridden method
+/*    #region Overridden method
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ProductTypeEntity>().HasData(GetProductTypes());
         modelBuilder.Entity<BrandEntity>().HasData(GetBrands());
+        modelBuilder.Entity<ProfileEntity>().HasData(GetProfiles());
         base.OnModelCreating(modelBuilder);
     }
     #endregion
@@ -72,13 +74,38 @@ public sealed class VouwwandenDbContext : DbContext
             {
                 yield return new BrandEntity
                 {
-                    Id = (int) type,
+                    Id = (int)type,
                     Name = type.GetDisplayName(),
                     Brand = type
                 };
             }
         }
     }
+    
+    private IEnumerable<ProfileEntity> GetProfiles()
+    {
+        foreach (Profile type in Enum.GetValues<Profile>())
+        {
+            if (type == Profile.None)
+                continue;
 
-    #endregion
+            BrandAttribute? brandAttribute = type.GetAttributeOfType<BrandAttribute>();
+            if (brandAttribute == null)
+                continue;
+            
+            BrandEntity? brand = Brands.Find((int)brandAttribute.Brand);
+            if (brand == null)
+                continue;
+
+            yield return new ProfileEntity
+            {
+                Id = (int)type,
+                Name = type.GetDisplayName(),
+                Profile = type,
+                Brand = brand
+            };
+        }
+    }
+
+    #endregion*/
 }

@@ -4,43 +4,51 @@ using Microsoft.EntityFrameworkCore;
 using VouwwandImages.Database;
 using VouwwandImages.ViewModels;
 
-namespace VouwwandImages
+namespace VouwwandImages;
+
+public partial class App
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    private static ServiceProvider? _serviceProvider;
+
+    public App()
     {
-        private static ServiceProvider? _serviceProvider;
+        ServiceCollection services = new ServiceCollection();
+        ConfigureServices(services);
+        _serviceProvider = services.BuildServiceProvider();
 
-        public App()
-        {
-            ServiceCollection services = new ServiceCollection();
-            ConfigureServices(services);
-            _serviceProvider = services.BuildServiceProvider();
-        }
+        UpdateDatabaseWithEnums();
+    }
 
-        private void ConfigureServices(ServiceCollection services)
-        {
-            services.AddDbContext<VouwwandenDbContext>(options => { options.UseSqlite("Data Source = Employee.db"); });
-            services.AddSingleton<MainWindow>();
+    private void UpdateDatabaseWithEnums()
+    {
+        EnumUpdater updater = App.GetService<EnumUpdater>();
 
-            services.AddSingleton<DataViewModel>();
-            services.AddSingleton<TranslatorViewModel>();
-            services.AddSingleton<ImagesViewModel>();
-            services.AddSingleton<PdfViewModel>();
+        updater.Update();
 
-        }
+    }
 
-        private void OnStartup(object sender, StartupEventArgs e)
-        {
-            var mainWindow = _serviceProvider.GetService<MainWindow>();
-            mainWindow.Show();
-        }
+    private void ConfigureServices(ServiceCollection services)
+    {
+        services.AddDbContext<VouwwandenDbContext>(options => { options.UseSqlite("Data Source = Employee.db"); });
+        services.AddSingleton<MainWindow>();
 
-        public static T GetService<T>()
-        {
-            return App._serviceProvider.GetService<T>();
-        }
+        services.AddSingleton<DataViewModel>();
+        services.AddSingleton<TranslatorViewModel>();
+        services.AddSingleton<ImagesViewModel>();
+        services.AddSingleton<PdfViewModel>();
+        services.AddSingleton<EnumUpdater>();
+
+    }
+
+    private void OnStartup(object sender, StartupEventArgs e)
+    {
+        var mainWindow = _serviceProvider.GetService<MainWindow>();
+        mainWindow.Show();
+    }
+
+    public static T GetService<T>()
+    {
+        return App._serviceProvider.GetService<T>();
     }
 }
+
